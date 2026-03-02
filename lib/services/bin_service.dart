@@ -8,7 +8,7 @@ import 'supabase_service.dart';
 class BinService {
   static const String _tableName = 'bins';
   static const String _bucketName = 'bins';
-  static final SupabaseClient _client = SupabaseService.client;
+  static SupabaseClient get _client => SupabaseService.client;
 
   static Stream<List<Bin>> watchBins() {
     return _client

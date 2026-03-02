@@ -148,7 +148,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
 
-                  CustomButton
+                  CustomButton(
                     text: 'Login',
                     onPressed: _isSubmitting ? null : _handleLogin,
                     type: ButtonType.primary,

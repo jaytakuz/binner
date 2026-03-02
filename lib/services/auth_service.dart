@@ -4,8 +4,8 @@ import '../models/user.dart' as app_models;
 import 'supabase_service.dart';
 
 class AuthService {
-  static final supabase.SupabaseClient _client = SupabaseService.client;
-  static final supabase.GoTrueClient _auth = _client.auth;
+  static supabase.SupabaseClient get _client => SupabaseService.client;
+  static supabase.GoTrueClient get _auth => _client.auth;
 
   static app_models.User? get currentUser => _mapUser(_auth.currentUser);
 

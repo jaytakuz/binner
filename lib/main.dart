@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'services/supabase_service.dart';
 import 'themes/app_theme.dart';
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
@@ -9,9 +10,6 @@ import 'pages/bin_details_page.dart';
 import 'pages/report_page.dart';
 import 'pages/add_bin_page.dart';
 import 'models/bin.dart';
-import 'services/supabase_service.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 Future<void> main() async  {
 
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +21,7 @@ Future<void> main() async  {
     rethrow;
   }
 
+  await SupabaseService.initialize();
   runApp(const MyApp());
 }
 

@@ -22,7 +22,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  final List<String> _pages = ['map', 'reports', 'account'];
+  final List<String> _pages = ['map', 'add_bin', 'account'];
+  List<Bin> _bins = [];
+  bool _isLoadingBins = true;
+  String? _binError;
+  StreamSubscription<List<Bin>>? _binSubscription;
+  StreamSubscription? _authSubscription;
 
   int get _adjustedIndex {
     if (_selectedIndex >= 1) return _selectedIndex - 1;
@@ -36,50 +41,21 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       setState(() {});
     });
+    _loadBins();
+    _listenToBinStream();
+    _authSubscription = AuthService.authStateChanges.listen((_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
   }
 
-  final List<Bin> _bins = [
-    Bin(
-      id: '1',
-      name: 'ถังขยะ คณะวิทยาศาสตร์',
-      location: 'คณะวิทยาศาสตร์ มหาวิทยาลัยเชียงใหม่',
-      latitude: 18.8037,
-      longitude: 98.9526,
-      binType: 'green',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ),
-    Bin(
-      id: '2',
-      name: 'ถังขยะ หอพักนักศึกษา',
-      location: 'หอพักนักศึกษา มหาวิทยาลัยเชียงใหม่',
-      latitude: 18.8047,
-      longitude: 98.9536,
-      binType: 'yellow',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ),
-    Bin(
-      id: '3',
-      name: 'ถังขยะ อาคารเรียนรวม',
-      location: 'อาคารเรียนรวม มหาวิทยาลัยเชียงใหม่',
-      latitude: 18.8057,
-      longitude: 98.9546,
-      binType: 'blue',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ),
-    Bin(
-      id: '4',
-      name: 'ถังขยะ โรงอาหารกลาง',
-      location: 'โรงอาหารกลาง มหาวิทยาลัยเชียงใหม่',
-      latitude: 18.8067,
-      longitude: 98.9556,
-      binType: 'green',
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    ),
-  ];
+  @override
+  void dispose() {
+    _binSubscription?.cancel();
+    _authSubscription?.cancel();
+    super.dispose();
+  }
 
   String _selectedBinType = 'all';
   final List<String> _binTypes = [
@@ -142,71 +118,42 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildMapView(BuildContext context) {
+    final filteredBins = _filterBins();
+
+    if (_isLoadingBins) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_binError != null && filteredBins.isEmpty) {
+      return _buildNoBinsState(context, error: _binError);
+    }
+
+    if (filteredBins.isEmpty) {
+      return _buildNoBinsState(context);
+    }
+
     return Stack(
       children: [
-        // TODO: Replace with actual map widget (Google Maps / Mapbox)
-        Container(
-          color: Colors.grey[200],
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.map_outlined, size: 100, color: Colors.grey[400]),
-                const SizedBox(height: 16),
-                Text(
-                  'แผนที่ถังขยะ',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'จะแสดงแผนที่จริงเมื่อเชื่อมต่อกับ Google Maps',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: Colors.grey[500]),
-                ),
-              ],
-            ),
-          ),
+        Positioned.fill(child: BinMapView(bins: filteredBins)),
+        Positioned(
+          right: 16,
+          top: 16,
+          child: _buildFilterChip(context),
         ),
-        // Bin markers overlay (placeholder)
-        ..._buildBinMarkers(context),
       ],
     );
   }
 
-  List<Widget> _buildBinMarkers(BuildContext context, List<Bin> bins) {
-    // TODO: Replace with actual map markers
-    final List<Widget> markers = [];
-    for (int i = 0; i < bins.length; i++) {
-      final bin = bins[i];
-      markers.add(
-        Positioned(
-          left: 50 + (i * 80) % 280,
-          top: 100 + (i * 100) % 400,
-          child: GestureDetector(
-            onTap: () => _showBinDetails(context, bin),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: AppTheme.getBinColor(bin.binType),
-                borderRadius: BorderRadius.circular(8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: const Icon(Icons.delete, color: Colors.white, size: 24),
-            ),
-          ),
-        ),
-      );
-    }
-    return markers;
+  Widget _buildFilterChip(BuildContext context) {
+    final typeName = _selectedBinType == 'all'
+        ? 'ทุกประเภท'
+        : AppTheme.getBinTypeName(_selectedBinType);
+    return FilterChip(
+      label: Text('กรอง: $typeName'),
+      selected: _selectedBinType != 'all',
+      onSelected: (_) => _showFilterBottomSheet(context),
+      backgroundColor: Colors.white,
+    );
   }
 
   Widget _buildNoBinsState(BuildContext context, {String? error}) {
@@ -380,15 +327,15 @@ class _HomePageState extends State<HomePage> {
             ),
             child: Column(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 50,
                   backgroundColor: Colors.white,
                   child: Icon(Icons.person, size: 60, color: AppTheme.primary),
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'ชื่อผู้ใช้',
-                  style: TextStyle(
+                Text(
+                  AuthService.currentUser?.name ?? 'User',
+                  style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -396,7 +343,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'user@example.com',
+                  AuthService.currentUser?.email ?? '-',
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.white.withOpacity(0.8),
@@ -542,6 +489,43 @@ class _HomePageState extends State<HomePage> {
       return _bins;
     }
     return _bins.where((bin) => bin.binType == _selectedBinType).toList();
+  }
+
+  Future<void> _loadBins() async {
+    try {
+      final bins = await BinService.fetchBins();
+      if (!mounted) return;
+      setState(() {
+        _bins = bins;
+        _isLoadingBins = false;
+        _binError = null;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _isLoadingBins = false;
+        _binError = error.toString();
+      });
+    }
+  }
+
+  void _listenToBinStream() {
+    _binSubscription = BinService.watchBins().listen(
+      (bins) {
+        if (!mounted) return;
+        setState(() {
+          _bins = bins;
+          _isLoadingBins = false;
+          _binError = null;
+        });
+      },
+      onError: (error) {
+        if (!mounted) return;
+        setState(() {
+          _binError = error.toString();
+        });
+      },
+    );
   }
 
   void _showFilterBottomSheet(BuildContext context) {

@@ -15,6 +15,7 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   StreamSubscription? _authSubscription;
+  bool _notificationsEnabled = true;
 
   @override
   void initState() {
