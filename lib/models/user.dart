@@ -1,0 +1,57 @@
+class User {
+  final String id;
+  final String email;
+  final String name;
+  final String? phone;
+  final String? profileImage;
+  final DateTime createdAt;
+
+  User({
+    required this.id,
+    required this.email,
+    required this.name,
+    this.phone,
+    this.profileImage,
+    required this.createdAt,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'] as String,
+      email: json['email'] as String,
+      name: json['name'] as String,
+      phone: json['phone'] as String?,
+      profileImage: json['profile_image'] as String?,
+      createdAt: DateTime.parse(json['created_at'] as String),
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'email': email,
+      'name': name,
+      'phone': phone,
+      'profile_image': profileImage,
+      'created_at': createdAt.toIso8601String(),
+    };
+  }
+
+  User copyWith({
+    String? id,
+    String? email,
+    String? name,
+    String? phone,
+    String? profileImage,
+    DateTime? createdAt,
+  }) {
+    return User(
+      id: id ?? this.id,
+      email: email ?? this.email,
+      name: name ?? this.name,
+      phone: phone ?? this.phone,
+      profileImage: profileImage ?? this.profileImage,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+}
