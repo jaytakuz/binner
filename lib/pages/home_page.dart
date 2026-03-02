@@ -5,6 +5,7 @@ import '../widgets/bin_card.dart';
 import '../models/bin.dart';
 import 'bin_details_page.dart';
 import 'report_page.dart';
+import 'account_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -100,8 +101,8 @@ class _HomePageState extends State<HomePage> {
         index: _selectedIndex,
         children: [
           _buildMapView(context),
-          _buildListView(context),
-          _buildBinTypesView(context),
+          _buildReportsView(context),
+          _buildAccountViewInline(context),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -118,26 +119,16 @@ class _HomePageState extends State<HomePage> {
             label: 'แผนที่',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list_outlined),
-            activeIcon: Icon(Icons.list),
-            label: 'รายการ',
+            icon: Icon(Icons.report_outlined),
+            activeIcon: Icon(Icons.report),
+            label: 'รายงาน',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.category_outlined),
-            activeIcon: Icon(Icons.category),
-            label: 'ประเภท',
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'บัญชี',
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ReportPage()),
-          );
-        },
-        icon: const Icon(Icons.add_photo_alternate_outlined),
-        label: const Text('รายงาน'),
       ),
     );
   }
@@ -308,6 +299,137 @@ class _HomePageState extends State<HomePage> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildReportsView(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.report_outlined, size: 80, color: Colors.grey[400]),
+          const SizedBox(height: 16),
+          Text(
+            'หน้ารายงาน',
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge?.copyWith(color: Colors.grey[600]),
+          ),
+          const SizedBox(height: 8),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ReportPage()),
+              );
+            },
+            child: const Text('สร้างรายงานใหม่'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAccountView(BuildContext context) {
+    return const AccountPage();
+  }
+
+  // Simple account view for bottom nav
+  Widget _buildAccountViewInline(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Profile Header
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppTheme.primary,
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(24),
+              ),
+            ),
+            child: Column(
+              children: [
+                const CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, size: 60, color: AppTheme.primary),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'ชื่อผู้ใช้',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'user@example.com',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          // Menu items
+          _buildAccountMenuItem(
+            context,
+            Icons.person_outline,
+            'ข้อมูลส่วนตัว',
+            onTap: () {
+              Navigator.pushNamed(context, '/account');
+            },
+          ),
+          _buildAccountMenuItem(
+            context,
+            Icons.history_outlined,
+            'ประวัติการรายงาน',
+            onTap: () {
+              Navigator.pushNamed(context, '/account');
+            },
+          ),
+          _buildAccountMenuItem(
+            context,
+            Icons.settings_outlined,
+            'ตั้งค่า',
+            onTap: () {
+              Navigator.pushNamed(context, '/account');
+            },
+          ),
+          _buildAccountMenuItem(
+            context,
+            Icons.logout,
+            'ออกจากระบบ',
+            color: AppTheme.error,
+            onTap: () {
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAccountMenuItem(
+    BuildContext context,
+    IconData icon,
+    String title, {
+    Color? color,
+    VoidCallback? onTap,
+  }) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: ListTile(
+        leading: Icon(icon, color: color ?? AppTheme.primary),
+        title: Text(title),
+        trailing: Icon(Icons.chevron_right, color: AppTheme.textSecondary),
+        onTap: onTap,
+      ),
     );
   }
 
