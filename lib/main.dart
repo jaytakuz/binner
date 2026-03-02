@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'themes/app_theme.dart';
 import 'pages/login_page.dart';
 import 'pages/register_page.dart';
@@ -9,7 +10,17 @@ import 'pages/report_page.dart';
 import 'pages/add_bin_page.dart';
 import 'models/bin.dart';
 
-void main() {
+Future<void> main() async {
+  // Ensure flutter initialized
+  WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e, stackTrace) {
+    debugPrint('Error loading .env file: $e\n$stackTrace');
+    rethrow;
+  }
+
   runApp(const MyApp());
 }
 
