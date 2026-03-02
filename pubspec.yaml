@@ -51,6 +51,9 @@ dependencies:
 
   # Permission Handler
   permission_handler: ^11.2.0
+  location: ^8.0.1
+  flutter_polyline_points: ^3.1.0
+  google_maps_flutter: ^2.14.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
