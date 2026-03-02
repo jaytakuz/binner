@@ -19,10 +19,10 @@ class _AccountPageState extends State<AccountPage> {
       return _buildLoginPrompt(context);
     }
 
-    // TODO: Replace with actual user data
-    final userName = 'ชื่อผู้ใช้';
-    final userEmail = 'user@example.com';
-    final userPhone = '081-234-5678';
+    final user = AuthService.currentUser!;
+    final userName = user.name;
+    final userEmail = user.email;
+    final userPhone = user.phone ?? '-';
 
     return Scaffold(
       appBar: AppBar(title: const Text('บัญชีของฉัน')),
