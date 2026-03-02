@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../themes/app_theme.dart';
 import '../widgets/custom_button.dart';
@@ -12,8 +14,23 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  bool _notificationsEnabled = true;
+  StreamSubscription? _authSubscription;
 
+  @override
+  void initState() {
+    super.initState();
+    _authSubscription = AuthService.authStateChanges.listen((_) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _authSubscription?.cancel();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     // Show login prompt if not logged in
@@ -21,9 +38,10 @@ class _AccountPageState extends State<AccountPage> {
       return _buildLoginPrompt(context);
     }
 
-    // TODO: Replace with actual user data
-    final userName = 'Username';
-    final userEmail = 'user@example.com';
+    final user = AuthService.currentUser!;
+    final userName = user.name;
+    final userEmail = user.email;
+    final userPhone = user.phone ?? '-';
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Account')),

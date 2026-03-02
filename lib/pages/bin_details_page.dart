@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../themes/app_theme.dart';
 import '../models/bin.dart';
 import '../widgets/custom_button.dart';
@@ -12,6 +13,7 @@ class BinDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final binColor = AppTheme.getBinColor(bin.binType);
+    final reportedAt = DateFormat('dd MMM yyyy HH:mm').format(bin.createdAt);
 
     return Scaffold(
       body: CustomScrollView(
@@ -71,6 +73,10 @@ class BinDetailsPage extends StatelessWidget {
                 children: [
                   // Location Card
                   _buildLocationCard(context, binColor),
+                  const SizedBox(height: 20),
+
+                  // Reporter Info
+                  _buildReporterCard(context, reportedAt),
                   const SizedBox(height: 20),
 
                   // Bin Type Info
@@ -267,6 +273,77 @@ class BinDetailsPage extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildReporterCard(BuildContext context, String reportedAt) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primary.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(Icons.person_outline, color: AppTheme.primary),
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'ข้อมูลผู้รายงาน',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            _buildInfoRow(
+              context,
+              label: 'ผู้รายงาน',
+              value: bin.addedByName,
+            ),
+            const SizedBox(height: 8),
+            _buildInfoRow(
+              context,
+              label: 'วันที่รายงาน',
+              value: reportedAt,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(
+    BuildContext context, {
+    required String label,
+    required String value,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: Theme.of(context)
+              .textTheme
+              .bodyMedium
+              ?.copyWith(color: AppTheme.textSecondary),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            value,
+            textAlign: TextAlign.end,
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
+      ],
     );
   }
 }

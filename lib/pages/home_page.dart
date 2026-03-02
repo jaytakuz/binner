@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:binner/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import '../themes/app_theme.dart';
@@ -5,11 +7,11 @@ import '../widgets/bin_card.dart';
 import '../models/bin.dart';
 import '../widgets/bin_map_view.dart';
 import 'bin_details_page.dart';
-import 'report_page.dart';
 import 'account_page.dart';
 import 'add_bin_page.dart';
 import 'login_page.dart';
 import '../services/auth_service.dart';
+import '../services/bin_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -41,8 +43,8 @@ class _HomePageState extends State<HomePage> {
       id: '1',
       name: 'ถังขยะ คณะวิทยาศาสตร์',
       location: 'คณะวิทยาศาสตร์ มหาวิทยาลัยเชียงใหม่',
-      latitude: 18.80389,
-      longitude: 98.95298,
+      latitude: 18.8037,
+      longitude: 98.9526,
       binType: 'green',
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
@@ -140,46 +142,45 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildMapView(BuildContext context) {
-    return BinMapView(bins: _filterBins());
-    // return Stack(
-    //   children: [
-    //     // TODO: Replace with actual map widget (Google Maps / Mapbox)
-    //     Container(
-    //       color: Colors.grey[200],
-    //       child: Center(
-    //         child: Column(
-    //           mainAxisAlignment: MainAxisAlignment.center,
-    //           children: [
-    //             Icon(Icons.map_outlined, size: 100, color: Colors.grey[400]),
-    //             const SizedBox(height: 16),
-    //             Text(
-    //               'แผนที่ถังขยะ',
-    //               style: Theme.of(
-    //                 context,
-    //               ).textTheme.titleLarge?.copyWith(color: Colors.grey[600]),
-    //             ),
-    //             const SizedBox(height: 8),
-    //             Text(
-    //               'จะแสดงแผนที่จริงเมื่อเชื่อมต่อกับ Google Maps',
-    //               style: Theme.of(
-    //                 context,
-    //               ).textTheme.bodySmall?.copyWith(color: Colors.grey[500]),
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //     // Bin markers overlay (placeholder)
-    //     ..._buildBinMarkers(context),
-    //   ],
-    // );
+    return Stack(
+      children: [
+        // TODO: Replace with actual map widget (Google Maps / Mapbox)
+        Container(
+          color: Colors.grey[200],
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.map_outlined, size: 100, color: Colors.grey[400]),
+                const SizedBox(height: 16),
+                Text(
+                  'แผนที่ถังขยะ',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(color: Colors.grey[600]),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'จะแสดงแผนที่จริงเมื่อเชื่อมต่อกับ Google Maps',
+                  style: Theme.of(
+                    context,
+                  ).textTheme.bodySmall?.copyWith(color: Colors.grey[500]),
+                ),
+              ],
+            ),
+          ),
+        ),
+        // Bin markers overlay (placeholder)
+        ..._buildBinMarkers(context),
+      ],
+    );
   }
 
-  List<Widget> _buildBinMarkers(BuildContext context) {
+  List<Widget> _buildBinMarkers(BuildContext context, List<Bin> bins) {
     // TODO: Replace with actual map markers
     final List<Widget> markers = [];
-    for (int i = 0; i < _bins.length; i++) {
-      final bin = _bins[i];
+    for (int i = 0; i < bins.length; i++) {
+      final bin = bins[i];
       markers.add(
         Positioned(
           left: 50 + (i * 80) % 280,
@@ -206,6 +207,45 @@ class _HomePageState extends State<HomePage> {
       );
     }
     return markers;
+  }
+
+  Widget _buildNoBinsState(BuildContext context, {String? error}) {
+    final message = error != null
+        ? 'ไม่สามารถโหลดข้อมูลได้\n$error'
+        : 'ยังไม่มีถังขยะในระบบ\nเพิ่มถังขยะใหม่เพื่อเริ่มต้น';
+    return Center(
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              error != null ? Icons.wifi_off : Icons.delete_outline,
+              size: 48,
+              color: AppTheme.textSecondary,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              message,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+            if (error != null) ...[
+              const SizedBox(height: 8),
+              CustomButton(
+                text: 'ลองใหม่',
+                onPressed: () => _loadBins(),
+                type: ButtonType.outline,
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildListView(BuildContext context) {
@@ -324,7 +364,89 @@ class _HomePageState extends State<HomePage> {
       return _buildGuestAccountView(context);
     }
 
-    return _buildAccountView(context);
+    final user = AuthService.currentUser;
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // Profile Header
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: AppTheme.primary,
+              borderRadius: const BorderRadius.vertical(
+                bottom: Radius.circular(24),
+              ),
+            ),
+            child: Column(
+              children: [
+                const CircleAvatar(
+                  radius: 50,
+                  backgroundColor: Colors.white,
+                  child: Icon(Icons.person, size: 60, color: AppTheme.primary),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'ชื่อผู้ใช้',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  'user@example.com',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.8),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          // Menu items
+          _buildAccountMenuItem(
+            context,
+            Icons.person_outline,
+            'ข้อมูลส่วนตัว',
+            onTap: () {
+              Navigator.pushNamed(context, '/account');
+            },
+          ),
+          _buildAccountMenuItem(
+            context,
+            Icons.history_outlined,
+            'ประวัติการรายงาน',
+            onTap: () {
+              Navigator.pushNamed(context, '/account');
+            },
+          ),
+          _buildAccountMenuItem(
+            context,
+            Icons.settings_outlined,
+            'ตั้งค่า',
+            onTap: () {
+              Navigator.pushNamed(context, '/account');
+            },
+          ),
+          _buildAccountMenuItem(
+            context,
+            Icons.logout,
+            'ออกจากระบบ',
+            color: AppTheme.error,
+            onTap: () {
+              AuthService.logout();
+              setState(() {});
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Logged out successfully')),
+              );
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   // Guest account view - shows login prompt

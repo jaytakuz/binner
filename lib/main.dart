@@ -9,6 +9,8 @@ import 'pages/bin_details_page.dart';
 import 'pages/report_page.dart';
 import 'pages/add_bin_page.dart';
 import 'models/bin.dart';
+import 'services/supabase_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async  {
 
