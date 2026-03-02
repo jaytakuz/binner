@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../themes/app_theme.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
+import 'login_page.dart';
+import '../services/auth_service.dart';
 
 class AddBinPage extends StatefulWidget {
   const AddBinPage({super.key});
@@ -44,9 +46,9 @@ class _AddBinPageState extends State<AddBinPage> {
             _isSubmitting = false;
           });
           Navigator.pop(context);
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('เพิ่มถังขยะสำเร็จ')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Bin added successfully')),
+          );
         }
       });
     }
@@ -58,9 +60,9 @@ class _AddBinPageState extends State<AddBinPage> {
       _latitudeController.text = '18.8037';
       _longitudeController.text = '98.9526';
     });
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('ดึงตำแหน่งปัจจุบันสำเร็จ')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Current location fetched successfully')),
+    );
   }
 
   @override
@@ -207,7 +209,13 @@ class _AddBinPageState extends State<AddBinPage> {
             // Submit Button
             CustomButton(
               text: 'บันทึกถังขยะ',
-              onPressed: _handleSubmit,
+              onPressed: () {
+                if (!AuthService.isLoggedIn) {
+                  _buildLoginPrompt(context);
+                } else {
+                  _handleSubmit();
+                }
+              },
               isLoading: _isSubmitting,
             ),
             const SizedBox(height: 16),
@@ -215,6 +223,16 @@ class _AddBinPageState extends State<AddBinPage> {
         ),
       ),
     );
+  }
+
+  Widget _buildLoginPrompt(BuildContext context) {
+    Text(
+      'คุณต้องเข้าสู่ระบบเพื่อเพิ่มถังขยะ',
+      style: Theme.of(
+        context,
+      ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
+    );
+    return const LoginPage();
   }
 
   Widget _buildSectionTitle(String title) {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../themes/app_theme.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
+import '../services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,7 +27,8 @@ class _LoginPageState extends State<LoginPage> {
   void _handleLogin() {
     if (_formKey.currentState!.validate()) {
       // TODO: Implement login logic
-      Navigator.pushReplacementNamed(context, '/home');
+      AuthService.login();
+      Navigator.pop(context, true); // Return true to indicate successful login
     }
   }
 

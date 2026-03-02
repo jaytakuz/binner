@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import '../themes/app_theme.dart';
 import '../widgets/custom_button.dart';
+import '../services/auth_service.dart';
+import 'login_page.dart';
 
-class AccountPage extends StatelessWidget {
+class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
 
   @override
+  State<AccountPage> createState() => _AccountPageState();
+}
+
+class _AccountPageState extends State<AccountPage> {
+  @override
   Widget build(BuildContext context) {
+    // Show login prompt if not logged in
+    if (!AuthService.isLoggedIn) {
+      return _buildLoginPrompt(context);
+    }
+
     // TODO: Replace with actual user data
     final userName = 'ชื่อผู้ใช้';
     final userEmail = 'user@example.com';
@@ -96,6 +108,64 @@ class AccountPage extends StatelessWidget {
             ]),
             const SizedBox(height: 24),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginPrompt(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('บัญชีของฉัน')),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(24),
+                decoration: BoxDecoration(
+                  color: AppTheme.primary.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.lock_outline,
+                  size: 64,
+                  color: AppTheme.primary,
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'ต้องเข้าสู่ระบบ',
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'กรุณาเข้าสู่ระบบเพื่อเข้าถึงบัญชีของคุณ',
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppTheme.textSecondary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              CustomButton(
+                text: 'เข้าสู่ระบบ',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  ).then((result) {
+                    if (result == true) {
+                      setState(() {}); // Refresh to check login status
+                    }
+                  });
+                },
+                icon: Icons.login,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -237,20 +307,24 @@ class AccountPage extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
-          title: const Text('ออกจากระบบ'),
-          content: const Text('คุณต้องการออกจากระบบหรือไม่?'),
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('ยกเลิก'),
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, '/login');
+                AuthService.logout();
+                setState(() {});
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Logged out successfully')),
+                );
               },
               style: ElevatedButton.styleFrom(backgroundColor: AppTheme.error),
-              child: const Text('ออกจากระบบ'),
+              child: const Text('Logout'),
             ),
           ],
         );
@@ -277,7 +351,7 @@ class AccountPage extends StatelessWidget {
                 child: Icon(Icons.delete_outline, color: AppTheme.primary),
               ),
               const SizedBox(width: 12),
-              const Text('เกี่ยวกับ Binner'),
+              const Text('About Binner'),
             ],
           ),
           content: Column(
@@ -286,13 +360,13 @@ class AccountPage extends StatelessWidget {
             children: [
               const Text('Binner'),
               Text(
-                'เวอร์ชัน 1.0.0',
+                'Version 1.0.0',
                 style: Theme.of(
                   context,
                 ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
               ),
               const SizedBox(height: 16),
-              const Text('แอพค้นหาตำแหน่งถังขยะในมหาวิทยาลัยเชียงใหม่'),
+              const Text('Bin finder application for Chiang Mai University'),
               const SizedBox(height: 16),
               const Text('© 2024 Binner Team'),
             ],
@@ -300,7 +374,7 @@ class AccountPage extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('ปิด'),
+              child: const Text('Close'),
             ),
           ],
         );

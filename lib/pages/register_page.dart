@@ -34,7 +34,7 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.pop(context);
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('สมัครสมาชิกสำเร็จ')));
+      ).showSnackBar(const SnackBar(content: Text('Registered successfully')));
     }
   }
 

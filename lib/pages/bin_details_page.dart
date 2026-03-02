@@ -103,7 +103,7 @@ class BinDetailsPage extends StatelessWidget {
                     onPressed: () {
                       // TODO: Implement navigation
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('เปิดแผนที่นำทาง...')),
+                        const SnackBar(content: Text('Opening navigation map...')),
                       );
                     },
                     type: ButtonType.outline,

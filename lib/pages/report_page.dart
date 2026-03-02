@@ -59,7 +59,7 @@ class _ReportPageState extends State<ReportPage> {
     if (_formKey.currentState!.validate()) {
       if (_selectedImages.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('กรุณาแนบรูปภาพอย่างน้อย 1 รูป')),
+          const SnackBar(content: Text('Please attach at least 1 image')),
         );
         return;
       }
@@ -77,7 +77,7 @@ class _ReportPageState extends State<ReportPage> {
           Navigator.pop(context);
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(const SnackBar(content: Text('ส่งรายงานสำเร็จ')));
+          ).showSnackBar(const SnackBar(content: Text('Report submitted successfully')));
         }
       });
     }

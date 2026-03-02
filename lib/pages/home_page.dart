@@ -7,6 +7,8 @@ import 'bin_details_page.dart';
 import 'report_page.dart';
 import 'account_page.dart';
 import 'add_bin_page.dart';
+import 'login_page.dart';
+import '../services/auth_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +24,15 @@ class _HomePageState extends State<HomePage> {
   int get _adjustedIndex {
     if (_selectedIndex >= 1) return _selectedIndex - 1;
     return _selectedIndex;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Refresh the page when returning from login
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {});
+    });
   }
 
   final List<Bin> _bins = [
@@ -306,6 +317,11 @@ class _HomePageState extends State<HomePage> {
 
   // Simple account view for bottom nav
   Widget _buildAccountViewInline(BuildContext context) {
+    // Show login prompt if not logged in
+    if (!AuthService.isLoggedIn) {
+      return _buildGuestAccountView(context);
+    }
+
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -377,10 +393,84 @@ class _HomePageState extends State<HomePage> {
             'ออกจากระบบ',
             color: AppTheme.error,
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/login');
+              AuthService.logout();
+              setState(() {});
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Logged out successfully')),
+              );
             },
           ),
         ],
+      ),
+    );
+  }
+
+  // Guest account view - shows login prompt
+  Widget _buildGuestAccountView(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: AppTheme.primary.withOpacity(0.1),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                Icons.person_outline,
+                size: 64,
+                color: AppTheme.primary,
+              ),
+            ),
+            const SizedBox(height: 24),
+            Text(
+              'บัญชีผู้ใช้',
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'เข้าสู่ระบบเพื่อเข้าถึงฟีเจอร์ทั้งหมด',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppTheme.textSecondary,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
+            CustomButton(
+              text: 'เข้าสู่ระบบ',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                ).then((result) {
+                  if (result == true) {
+                    setState(() {}); // Refresh to check login status
+                  }
+                });
+              },
+              icon: Icons.login,
+            ),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                ).then((result) {
+                  if (result == true) {
+                    setState(() {}); // Refresh to check login status
+                  }
+                });
+              },
+              child: const Text('สมัครสมาชิก'),
+            ),
+          ],
+        ),
       ),
     );
   }
