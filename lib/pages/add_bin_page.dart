@@ -16,7 +16,6 @@ class _AddBinPageState extends State<AddBinPage> {
   final _locationController = TextEditingController();
   final _latitudeController = TextEditingController();
   final _longitudeController = TextEditingController();
-  final _capacityController = TextEditingController(text: '100');
 
   String _selectedBinType = 'green';
   bool _isSubmitting = false;
@@ -29,7 +28,6 @@ class _AddBinPageState extends State<AddBinPage> {
     _locationController.dispose();
     _latitudeController.dispose();
     _longitudeController.dispose();
-    _capacityController.dispose();
     super.dispose();
   }
 
@@ -204,27 +202,6 @@ class _AddBinPageState extends State<AddBinPage> {
             _buildSectionTitle('ประเภทถังขยะ'),
             const SizedBox(height: 12),
             _buildBinTypeSelector(context),
-            const SizedBox(height: 24),
-
-            // Capacity
-            _buildSectionTitle('ความจุ (%)'),
-            const SizedBox(height: 12),
-            CustomTextField(
-              controller: _capacityController,
-              hint: 'เช่น 100',
-              keyboardType: TextInputType.number,
-              prefixIcon: Icons.opacity_outlined,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'กรุณากรอกความจุ';
-                }
-                final capacity = int.tryParse(value);
-                if (capacity == null || capacity < 0 || capacity > 100) {
-                  return 'ความจุต้องอยู่ระหว่าง 0-100';
-                }
-                return null;
-              },
-            ),
             const SizedBox(height: 32),
 
             // Submit Button

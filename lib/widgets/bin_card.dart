@@ -48,13 +48,7 @@ class BinCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
                     const SizedBox(height: 8),
-                    Row(
-                      children: [
-                        _buildStatusChip(context, bin.status),
-                        const SizedBox(width: 8),
-                        _buildTypeChip(context, bin.binType, binColor),
-                      ],
-                    ),
+                    _buildTypeChip(context, bin.binType, binColor),
                   ],
                 ),
               ),
@@ -62,55 +56,6 @@ class BinCard extends StatelessWidget {
               Icon(Icons.chevron_right, color: AppTheme.textSecondary),
             ],
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatusChip(BuildContext context, BinStatus status) {
-    Color chipColor;
-    String label;
-
-    switch (status) {
-      case BinStatus.available:
-        chipColor = AppTheme.success;
-        label = status.displayName;
-        break;
-      case BinStatus.halfFull:
-        chipColor = Colors.amber[700]!;
-        label = status.displayName;
-        break;
-      case BinStatus.almostFull:
-        chipColor = AppTheme.warning;
-        label = status.displayName;
-        break;
-      case BinStatus.full:
-        chipColor = AppTheme.error;
-        label = status.displayName;
-        break;
-      case BinStatus.maintenance:
-        chipColor = Colors.blue;
-        label = status.displayName;
-        break;
-      case BinStatus.damaged:
-        chipColor = Colors.red[900]!;
-        label = status.displayName;
-        break;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: chipColor.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: chipColor, width: 1),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: chipColor,
-          fontSize: 12,
-          fontWeight: FontWeight.w500,
         ),
       ),
     );
