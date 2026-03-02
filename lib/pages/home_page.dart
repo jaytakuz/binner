@@ -6,6 +6,7 @@ import '../models/bin.dart';
 import 'bin_details_page.dart';
 import 'report_page.dart';
 import 'account_page.dart';
+import 'add_bin_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -16,6 +17,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
+  final List<String> _pages = ['map', 'reports', 'account'];
+
+  int get _adjustedIndex {
+    if (_selectedIndex >= 1) return _selectedIndex - 1;
+    return _selectedIndex;
+  }
+
   final List<Bin> _bins = [
     Bin(
       id: '1',
@@ -84,12 +92,6 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Binner'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              // TODO: Implement search
-            },
-          ),
-          IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: () {
               _showFilterBottomSheet(context);
@@ -101,7 +103,7 @@ class _HomePageState extends State<HomePage> {
         index: _selectedIndex,
         children: [
           _buildMapView(context),
-          _buildReportsView(context),
+          _buildAddBinView(context),
           _buildAccountViewInline(context),
         ],
       ),
@@ -116,17 +118,17 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.map_outlined),
             activeIcon: Icon(Icons.map),
-            label: 'แผนที่',
+            label: 'Map',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.report_outlined),
-            activeIcon: Icon(Icons.report),
-            label: 'รายงาน',
+            icon: Icon(Icons.add_outlined),
+            activeIcon: Icon(Icons.add),
+            label: 'Add Bin',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person_outline),
             activeIcon: Icon(Icons.person),
-            label: 'บัญชี',
+            label: 'Account',
           ),
         ],
       ),
@@ -302,32 +304,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildReportsView(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.report_outlined, size: 80, color: Colors.grey[400]),
-          const SizedBox(height: 16),
-          Text(
-            'หน้ารายงาน',
-            style: Theme.of(
-              context,
-            ).textTheme.titleLarge?.copyWith(color: Colors.grey[600]),
-          ),
-          const SizedBox(height: 8),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ReportPage()),
-              );
-            },
-            child: const Text('สร้างรายงานใหม่'),
-          ),
-        ],
-      ),
-    );
+  Widget _buildAddBinView(BuildContext context) {
+    return const AddBinPage();
   }
 
   Widget _buildAccountView(BuildContext context) {
