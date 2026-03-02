@@ -12,6 +12,8 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
+  bool _notificationsEnabled = true;
+
   @override
   Widget build(BuildContext context) {
     // Show login prompt if not logged in
@@ -20,12 +22,11 @@ class _AccountPageState extends State<AccountPage> {
     }
 
     // TODO: Replace with actual user data
-    final userName = 'ชื่อผู้ใช้';
+    final userName = 'Username';
     final userEmail = 'user@example.com';
-    final userPhone = '081-234-5678';
 
     return Scaffold(
-      appBar: AppBar(title: const Text('บัญชีของฉัน')),
+      appBar: AppBar(title: const Text('My Account')),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -33,61 +34,24 @@ class _AccountPageState extends State<AccountPage> {
             _buildProfileHeader(context, userName, userEmail),
             const SizedBox(height: 24),
 
-            // Menu Items
-            _buildMenuSection(context, [
-              _MenuItem(
-                icon: Icons.person_outline,
-                title: 'ข้อมูลส่วนตัว',
-                onTap: () {
-                  // TODO: Navigate to profile edit
-                },
-              ),
-              _MenuItem(
-                icon: Icons.history_outlined,
-                title: 'ประวัติการรายงาน',
-                onTap: () {
-                  // TODO: Navigate to report history
-                },
-              ),
-              _MenuItem(
-                icon: Icons.favorite_outline,
-                title: 'รายการโปรด',
-                onTap: () {
-                  // TODO: Navigate to favorites
-                },
-              ),
-            ]),
             const SizedBox(height: 16),
 
             _buildMenuSection(context, [
               _MenuItem(
                 icon: Icons.notifications_outlined,
-                title: 'การแจ้งเตือน',
+                title: 'Notifications',
                 trailing: Switch(
-                  value: true,
+                  value: _notificationsEnabled,
                   onChanged: (value) {
-                    // TODO: Toggle notifications
+                    setState(() {
+                      _notificationsEnabled = value;
+                    });
                   },
                 ),
               ),
               _MenuItem(
-                icon: Icons.language_outlined,
-                title: 'ภาษา',
-                subtitle: 'ไทย',
-                onTap: () {
-                  // TODO: Show language selection
-                },
-              ),
-              _MenuItem(
-                icon: Icons.help_outline,
-                title: 'ช่วยเหลือ',
-                onTap: () {
-                  // TODO: Navigate to help
-                },
-              ),
-              _MenuItem(
                 icon: Icons.info_outline,
-                title: 'เกี่ยวกับแอพ',
+                title: 'About App',
                 onTap: () {
                   _showAboutDialog(context);
                 },
@@ -98,7 +62,7 @@ class _AccountPageState extends State<AccountPage> {
             _buildMenuSection(context, [
               _MenuItem(
                 icon: Icons.logout,
-                title: 'ออกจากระบบ',
+                title: 'Logout',
                 titleColor: AppTheme.error,
                 iconColor: AppTheme.error,
                 onTap: () {
@@ -115,7 +79,7 @@ class _AccountPageState extends State<AccountPage> {
 
   Widget _buildLoginPrompt(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('บัญชีของฉัน')),
+      appBar: AppBar(title: const Text('My Account')),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -136,22 +100,22 @@ class _AccountPageState extends State<AccountPage> {
               ),
               const SizedBox(height: 24),
               Text(
-                'ต้องเข้าสู่ระบบ',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                'Login Required',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               Text(
-                'กรุณาเข้าสู่ระบบเพื่อเข้าถึงบัญชีของคุณ',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.textSecondary,
-                ),
+                'Please login to access your account',
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
               CustomButton(
-                text: 'เข้าสู่ระบบ',
+                text: 'Login',
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -354,22 +318,49 @@ class _AccountPageState extends State<AccountPage> {
               const Text('About Binner'),
             ],
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text('Binner'),
-              Text(
-                'Version 1.0.0',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
-              ),
-              const SizedBox(height: 16),
-              const Text('Bin finder application for Chiang Mai University'),
-              const SizedBox(height: 16),
-              const Text('© 2024 Binner Team'),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Binner',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Version 1.0.0',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppTheme.textSecondary,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'A cross-platform mobile application designed to tackle solid waste management challenges at Chiang Mai University.',
+                  style: TextStyle(height: 1.5),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Flutter project for 953464 — Mobile App Dev course',
+                  style: TextStyle(fontStyle: FontStyle.italic, fontSize: 12),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Group Members:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  '• 652115059 Xiaoyou Fung\n'
+                  '• 662115019 Thippharake Na Chiengmai\n'
+                  '• 662115022 Thanatchanan Kanjina\n'
+                  '• 662115032 Pongpiphat Kalasuk\n'
+                  '• 662115047 Watcharapong Wanna',
+                  style: TextStyle(fontSize: 12, height: 1.5),
+                ),
+                const SizedBox(height: 16),
+                const Text('© 2026 Binner Team'),
+              ],
+            ),
           ),
           actions: [
             TextButton(

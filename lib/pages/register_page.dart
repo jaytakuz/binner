@@ -14,7 +14,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
@@ -22,7 +21,6 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-    _phoneController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -42,7 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('สมัครสมาชิก'),
+        title: const Text('Register'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
@@ -59,7 +57,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   // Header
                   Text(
-                    'สร้างบัญชีใหม่',
+                    'Create New Account',
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       color: AppTheme.primary,
                       fontWeight: FontWeight.bold,
@@ -68,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'กรอกข้อมูลเพื่อสมัครสมาชิก',
+                    'Fill in the form to register',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppTheme.textSecondary,
                     ),
@@ -78,15 +76,15 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   // Name Field
                   CustomTextField(
-                    label: 'ชื่อ-นามสกุล',
-                    hint: 'กรอกชื่อและนามสกุลของคุณ',
+                    label: 'Full Name',
+                    hint: 'Enter your full name',
                     controller: _nameController,
                     keyboardType: TextInputType.name,
                     textInputAction: TextInputAction.next,
                     prefixIcon: Icons.person_outline,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'กรุณากรอกชื่อ-นามสกุล';
+                        return 'Please enter your full name';
                       }
                       return null;
                     },
@@ -95,38 +93,18 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   // Email Field
                   CustomTextField(
-                    label: 'อีเมล',
-                    hint: 'กรอกอีเมลของคุณ',
+                    label: 'Email',
+                    hint: 'Enter your email',
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     prefixIcon: Icons.email_outlined,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'กรุณากรอกอีเมล';
+                        return 'Please enter your email';
                       }
                       if (!value.contains('@')) {
-                        return 'กรุณากรอกอีเมลที่ถูกต้อง';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Phone Field
-                  CustomTextField(
-                    label: 'เบอร์โทรศัพท์',
-                    hint: 'กรอกเบอร์โทรศัพท์ของคุณ',
-                    controller: _phoneController,
-                    keyboardType: TextInputType.phone,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: Icons.phone_outlined,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'กรุณากรอกเบอร์โทรศัพท์';
-                      }
-                      if (value.length < 10) {
-                        return 'กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก';
+                        return 'Please enter a valid email';
                       }
                       return null;
                     },
@@ -135,16 +113,16 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   // Password Field
                   PasswordField(
-                    label: 'รหัสผ่าน',
-                    hint: 'กรอกรหัสผ่านของคุณ',
+                    label: 'Password',
+                    hint: 'Enter your password',
                     controller: _passwordController,
                     textInputAction: TextInputAction.next,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'กรุณากรอกรหัสผ่าน';
+                        return 'Please enter your password';
                       }
                       if (value.length < 6) {
-                        return 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+                        return 'Password must be at least 6 characters';
                       }
                       return null;
                     },
@@ -153,16 +131,16 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   // Confirm Password Field
                   PasswordField(
-                    label: 'ยืนยันรหัสผ่าน',
-                    hint: 'กรอกรหัสผ่านอีกครั้ง',
+                    label: 'Confirm Password',
+                    hint: 'Enter your password again',
                     controller: _confirmPasswordController,
                     textInputAction: TextInputAction.done,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'กรุณายืนยันรหัสผ่าน';
+                        return 'Please confirm your password';
                       }
                       if (value != _passwordController.text) {
-                        return 'รหัสผ่านไม่ตรงกัน';
+                        return 'Passwords do not match';
                       }
                       return null;
                     },
@@ -183,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           padding: const EdgeInsets.only(top: 12),
                           child: Wrap(
                             children: [
-                              const Text('ฉันยอมรับ'),
+                              const Text('I accept the '),
                               TextButton(
                                 onPressed: () {},
                                 style: TextButton.styleFrom(
@@ -195,9 +173,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                   tapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                 ),
-                                child: const Text('เงื่อนไขและข้อตกลง'),
+                                child: const Text('Terms and Conditions'),
                               ),
-                              const Text('และ'),
+                              const Text(' and '),
                               TextButton(
                                 onPressed: () {},
                                 style: TextButton.styleFrom(
@@ -209,7 +187,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   tapTargetSize:
                                       MaterialTapTargetSize.shrinkWrap,
                                 ),
-                                child: const Text('นโยบายความเป็นส่วนตัว'),
+                                child: const Text('Privacy Policy'),
                               ),
                             ],
                           ),
@@ -221,7 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   // Register Button
                   CustomButton(
-                    text: 'สมัครสมาชิก',
+                    text: 'Register',
                     onPressed: _handleRegister,
                     type: ButtonType.primary,
                   ),
@@ -231,12 +209,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('มีบัญชีอยู่แล้ว?'),
+                      const Text('Already have an account?'),
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('เข้าสู่ระบบ'),
+                        child: const Text('Login'),
                       ),
                     ],
                   ),

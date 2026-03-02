@@ -324,87 +324,7 @@ class _HomePageState extends State<HomePage> {
       return _buildGuestAccountView(context);
     }
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          // Profile Header
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: AppTheme.primary,
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(24),
-              ),
-            ),
-            child: Column(
-              children: [
-                const CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 60, color: AppTheme.primary),
-                ),
-                const SizedBox(height: 16),
-                const Text(
-                  'ชื่อผู้ใช้',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'user@example.com',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-          // Menu items
-          _buildAccountMenuItem(
-            context,
-            Icons.person_outline,
-            'ข้อมูลส่วนตัว',
-            onTap: () {
-              Navigator.pushNamed(context, '/account');
-            },
-          ),
-          _buildAccountMenuItem(
-            context,
-            Icons.history_outlined,
-            'ประวัติการรายงาน',
-            onTap: () {
-              Navigator.pushNamed(context, '/account');
-            },
-          ),
-          _buildAccountMenuItem(
-            context,
-            Icons.settings_outlined,
-            'ตั้งค่า',
-            onTap: () {
-              Navigator.pushNamed(context, '/account');
-            },
-          ),
-          _buildAccountMenuItem(
-            context,
-            Icons.logout,
-            'ออกจากระบบ',
-            color: AppTheme.error,
-            onTap: () {
-              AuthService.logout();
-              setState(() {});
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Logged out successfully')),
-              );
-            },
-          ),
-        ],
-      ),
-    );
+    return _buildAccountView(context);
   }
 
   // Guest account view - shows login prompt
@@ -430,16 +350,16 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 24),
             Text(
               'บัญชีผู้ใช้',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             Text(
               'เข้าสู่ระบบเพื่อเข้าถึงฟีเจอร์ทั้งหมด',
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppTheme.textSecondary,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),
