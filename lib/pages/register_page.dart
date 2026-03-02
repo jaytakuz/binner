@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+
 import '../themes/app_theme.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
+import '../services/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -17,6 +20,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  bool _isSubmitting = false;
+  String? _error;
 
   @override
   void dispose() {
@@ -28,13 +33,48 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  void _handleRegister() {
-    if (_formKey.currentState!.validate()) {
-      // TODO: Implement register logic
-      Navigator.pop(context);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Registered successfully')));
+  Future<void> _handleRegister() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      _isSubmitting = true;
+      _error = null;
+    });
+
+    try {
+      final response = await AuthService.registerWithEmail(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+        name: _nameController.text.trim(),
+        phone: _phoneController.text.trim(),
+      );
+
+      if (!mounted) return;
+      final requiresEmailConfirm = response.session == null;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            requiresEmailConfirm
+                ? 'สมัครสมาชิกสำเร็จ โปรดตรวจสอบอีเมลเพื่อยืนยันบัญชี'
+                : 'สมัครสมาชิกและเข้าสู่ระบบสำเร็จ',
+          ),
+        ),
+      );
+      Navigator.pop(context, true);
+    } on AuthException catch (error) {
+      setState(() {
+        _error = error.message;
+      });
+    } catch (error) {
+      setState(() {
+        _error = 'ไม่สามารถสมัครสมาชิกได้ ($error)';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
     }
   }
 
@@ -220,10 +260,20 @@ class _RegisterPageState extends State<RegisterPage> {
                   const SizedBox(height: 24),
 
                   // Register Button
+                  if (_error != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Text(
+                        _error!,
+                        style: TextStyle(color: AppTheme.error),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   CustomButton(
                     text: 'สมัครสมาชิก',
-                    onPressed: _handleRegister,
+                    onPressed: _isSubmitting ? null : _handleRegister,
                     type: ButtonType.primary,
+                    isLoading: _isSubmitting,
                   ),
                   const SizedBox(height: 16),
 

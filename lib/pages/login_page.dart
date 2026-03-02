@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../themes/app_theme.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
@@ -16,6 +17,8 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _rememberMe = false;
+  bool _isSubmitting = false;
+  String? _error;
 
   @override
   void dispose() {
@@ -24,11 +27,34 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _handleLogin() {
-    if (_formKey.currentState!.validate()) {
-      // TODO: Implement login logic
-      AuthService.login();
-      Navigator.pop(context, true); // Return true to indicate successful login
+  Future<void> _handleLogin() async {
+    if (!_formKey.currentState!.validate()) return;
+    setState(() {
+      _isSubmitting = true;
+      _error = null;
+    });
+
+    try {
+      await AuthService.loginWithEmail(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } on AuthException catch (error) {
+      setState(() {
+        _error = error.message;
+      });
+    } catch (error) {
+      setState(() {
+        _error = 'ไม่สามารถเข้าสู่ระบบได้ ($error)';
+      });
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isSubmitting = false;
+        });
+      }
     }
   }
 
@@ -112,10 +138,21 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 24),
 
                   // Login Button
+                  if (_error != null)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Text(
+                        _error!,
+                        style: TextStyle(color: AppTheme.error),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+
                   CustomButton(
                     text: 'เข้าสู่ระบบ',
-                    onPressed: _handleLogin,
+                    onPressed: _isSubmitting ? null : _handleLogin,
                     type: ButtonType.primary,
+                    isLoading: _isSubmitting,
                   ),
                   const SizedBox(height: 16),
 
