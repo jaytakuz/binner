@@ -14,3 +14,13 @@ Flutter project for **953464 — Mobile App Dev course**
 3. **Waste Separation Guidelines**: Provides comprehensive information on different types of waste (such as general waste, recyclables, compost, and hazardous waste) to encourage proper waste sorting at the source.
 4. **Direct Issue Reporting**: Users can notify campus management or relevant authorities about damaged facilities or scattered waste outside designated areas, facilitating faster cleanup efforts.
 5. **User-Friendly Interface**: Developed from the ground up with Flutter, providing a fast, simple, and highly responsive experience for all users.
+
+## Local environment setup
+
+7. **Run with Supabase environment variables**: after adding your `.env` file with `SUPABASE_URL` and `SUPABASE_ANON_KEY`, launch the app locally to verify Supabase connectivity:
+
+```bash
+flutter run --dart-define-from-file=.env
+```
+
+This ensures that `SupabaseService.initialize()` succeeds and that real-time streams return data correctly before shipping any change.
