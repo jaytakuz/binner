@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../themes/app_theme.dart';
 import '../widgets/bin_card.dart';
 import '../models/bin.dart';
+import '../widgets/bin_map_view.dart';
 import 'bin_details_page.dart';
 import 'report_page.dart';
 import 'account_page.dart';
@@ -40,8 +41,8 @@ class _HomePageState extends State<HomePage> {
       id: '1',
       name: 'ถังขยะ คณะวิทยาศาสตร์',
       location: 'คณะวิทยาศาสตร์ มหาวิทยาลัยเชียงใหม่',
-      latitude: 18.8037,
-      longitude: 98.9526,
+      latitude: 18.80389,
+      longitude: 98.95298,
       binType: 'green',
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
@@ -139,38 +140,39 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildMapView(BuildContext context) {
-    return Stack(
-      children: [
-        // TODO: Replace with actual map widget (Google Maps / Mapbox)
-        Container(
-          color: Colors.grey[200],
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.map_outlined, size: 100, color: Colors.grey[400]),
-                const SizedBox(height: 16),
-                Text(
-                  'แผนที่ถังขยะ',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge?.copyWith(color: Colors.grey[600]),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'จะแสดงแผนที่จริงเมื่อเชื่อมต่อกับ Google Maps',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.bodySmall?.copyWith(color: Colors.grey[500]),
-                ),
-              ],
-            ),
-          ),
-        ),
-        // Bin markers overlay (placeholder)
-        ..._buildBinMarkers(context),
-      ],
-    );
+    return BinMapView(bins: _filterBins());
+    // return Stack(
+    //   children: [
+    //     // TODO: Replace with actual map widget (Google Maps / Mapbox)
+    //     Container(
+    //       color: Colors.grey[200],
+    //       child: Center(
+    //         child: Column(
+    //           mainAxisAlignment: MainAxisAlignment.center,
+    //           children: [
+    //             Icon(Icons.map_outlined, size: 100, color: Colors.grey[400]),
+    //             const SizedBox(height: 16),
+    //             Text(
+    //               'แผนที่ถังขยะ',
+    //               style: Theme.of(
+    //                 context,
+    //               ).textTheme.titleLarge?.copyWith(color: Colors.grey[600]),
+    //             ),
+    //             const SizedBox(height: 8),
+    //             Text(
+    //               'จะแสดงแผนที่จริงเมื่อเชื่อมต่อกับ Google Maps',
+    //               style: Theme.of(
+    //                 context,
+    //               ).textTheme.bodySmall?.copyWith(color: Colors.grey[500]),
+    //             ),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //     // Bin markers overlay (placeholder)
+    //     ..._buildBinMarkers(context),
+    //   ],
+    // );
   }
 
   List<Widget> _buildBinMarkers(BuildContext context) {

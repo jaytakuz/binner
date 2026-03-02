@@ -10,8 +10,8 @@ import 'pages/report_page.dart';
 import 'pages/add_bin_page.dart';
 import 'models/bin.dart';
 
-Future<void> main() async {
-  // Ensure flutter initialized
+Future<void> main() async  {
+
   WidgetsFlutterBinding.ensureInitialized();
 
   try {

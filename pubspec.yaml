@@ -44,7 +44,7 @@ dependencies:
   geolocator: ^10.1.0
 
   # HTTP Client
-  http: ^1.2.0
+  http: ^1.6.0
 
   # Local Storage
   shared_preferences: ^2.2.2
