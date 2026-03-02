@@ -51,18 +51,18 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Email Field
                   CustomTextField(
-                    label: 'อีเมล',
-                    hint: 'กรอกอีเมลของคุณ',
+                    label: 'Email',
+                    hint: 'Enter your email',
                     controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     prefixIcon: Icons.email_outlined,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'กรุณากรอกอีเมล';
+                        return 'Please enter your email';
                       }
                       if (!value.contains('@')) {
-                        return 'กรุณากรอกอีเมลที่ถูกต้อง';
+                        return 'Please enter a valid email';
                       }
                       return null;
                     },
@@ -71,16 +71,16 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Password Field
                   PasswordField(
-                    label: 'รหัสผ่าน',
-                    hint: 'กรอกรหัสผ่านของคุณ',
+                    label: 'Password',
+                    hint: 'Enter your password',
                     controller: _passwordController,
                     textInputAction: TextInputAction.done,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'กรุณากรอกรหัสผ่าน';
+                        return 'Please enter your password';
                       }
                       if (value.length < 6) {
-                        return 'รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร';
+                        return 'Password must be at least 6 characters';
                       }
                       return null;
                     },
@@ -99,13 +99,13 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         activeColor: AppTheme.primary,
                       ),
-                      const Text('จดจำฉัน'),
+                      const Text('Remember me'),
                       const Spacer(),
                       TextButton(
                         onPressed: () {
                           // TODO: Implement forgot password
                         },
-                        child: const Text('ลืมรหัสผ่าน?'),
+                        child: const Text('Forgot password?'),
                       ),
                     ],
                   ),
@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
 
                   // Login Button
                   CustomButton(
-                    text: 'เข้าสู่ระบบ',
+                    text: 'Login',
                     onPressed: _handleLogin,
                     type: ButtonType.primary,
                   ),
@@ -123,12 +123,12 @@ class _LoginPageState extends State<LoginPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text('ยังไม่มีบัญชี?'),
+                      const Text("Don't have an account?"),
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/register');
                         },
-                        child: const Text('สมัครสมาชิก'),
+                        child: const Text('Register'),
                       ),
                     ],
                   ),
@@ -167,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 8),
         Text(
-          'ค้นหาตำแหน่งถังขยะในมหาวิทยาลัย',
+          'Find trash bin locations in university',
           style: Theme.of(
             context,
           ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
