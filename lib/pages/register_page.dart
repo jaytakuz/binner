@@ -14,7 +14,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
@@ -22,7 +21,6 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
-    _phoneController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
@@ -107,26 +105,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                       if (!value.contains('@')) {
                         return 'กรุณากรอกอีเมลที่ถูกต้อง';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Phone Field
-                  CustomTextField(
-                    label: 'เบอร์โทรศัพท์',
-                    hint: 'กรอกเบอร์โทรศัพท์ของคุณ',
-                    controller: _phoneController,
-                    keyboardType: TextInputType.phone,
-                    textInputAction: TextInputAction.next,
-                    prefixIcon: Icons.phone_outlined,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'กรุณากรอกเบอร์โทรศัพท์';
-                      }
-                      if (value.length < 10) {
-                        return 'กรุณากรอกเบอร์โทรศัพท์ให้ครบ 10 หลัก';
                       }
                       return null;
                     },

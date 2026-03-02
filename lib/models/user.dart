@@ -20,7 +20,6 @@ class User {
       id: json['id'] as String,
       email: json['email'] as String,
       name: json['name'] as String,
-      phone: json['phone'] as String?,
       profileImage: json['profile_image'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
     );
@@ -31,7 +30,6 @@ class User {
       'id': id,
       'email': email,
       'name': name,
-      'phone': phone,
       'profile_image': profileImage,
       'created_at': createdAt.toIso8601String(),
     };
@@ -41,7 +39,6 @@ class User {
     String? id,
     String? email,
     String? name,
-    String? phone,
     String? profileImage,
     DateTime? createdAt,
   }) {
@@ -49,7 +46,6 @@ class User {
       id: id ?? this.id,
       email: email ?? this.email,
       name: name ?? this.name,
-      phone: phone ?? this.phone,
       profileImage: profileImage ?? this.profileImage,
       createdAt: createdAt ?? this.createdAt,
     );

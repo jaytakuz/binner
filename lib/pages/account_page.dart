@@ -22,7 +22,6 @@ class _AccountPageState extends State<AccountPage> {
     // TODO: Replace with actual user data
     final userName = 'ชื่อผู้ใช้';
     final userEmail = 'user@example.com';
-    final userPhone = '081-234-5678';
 
     return Scaffold(
       appBar: AppBar(title: const Text('บัญชีของฉัน')),
@@ -137,16 +136,16 @@ class _AccountPageState extends State<AccountPage> {
               const SizedBox(height: 24),
               Text(
                 'ต้องเข้าสู่ระบบ',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
               Text(
                 'กรุณาเข้าสู่ระบบเพื่อเข้าถึงบัญชีของคุณ',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.textSecondary,
-                ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
