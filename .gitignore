@@ -44,11 +44,12 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-
 # iOS - Hide configuration files that contain secrets
 ios/Flutter/Debug.xcconfig
 ios/Flutter/Release.xcconfig
 
 # Android - Hide local properties (usually ignored by default)
 /android/local.properties
+.env
+# ENV files
 .env
