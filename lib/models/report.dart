@@ -97,17 +97,17 @@ enum ReportType {
   String get displayName {
     switch (this) {
       case ReportType.full:
-        return 'ถังขยะเต็ม';
+        return 'Bin Full';
       case ReportType.damaged:
-        return 'ถังขยะชำรุด';
+        return 'Bin Damaged';
       case ReportType.missing:
-        return 'ไม่พบถังขยะ';
+        return 'Bin Not Found';
       case ReportType.overflow:
-        return 'ขยะล้น';
+        return 'Overflow';
       case ReportType.badOdor:
-        return 'มีกลิ่นเหม็น';
+        return 'Bad Odor';
       case ReportType.other:
-        return 'อื่นๆ';
+        return 'Other';
     }
   }
 }
@@ -131,13 +131,13 @@ enum ReportStatus {
   String get displayName {
     switch (this) {
       case ReportStatus.pending:
-        return 'รอดำเนินการ';
+        return 'Pending';
       case ReportStatus.inProgress:
-        return 'กำลังดำเนินการ';
+        return 'In Progress';
       case ReportStatus.resolved:
-        return 'ดำเนินการเสร็จสิ้น';
+        return 'Resolved';
       case ReportStatus.rejected:
-        return 'ปฏิเสธ';
+        return 'Rejected';
     }
   }
 }

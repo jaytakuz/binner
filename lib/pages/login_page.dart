@@ -47,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
       });
     } catch (error) {
       setState(() {
-        _error = 'ไม่สามารถเข้าสู่ระบบได้ ($error)';
+        _error = 'Unable to login ($error)';
       });
     } finally {
       if (mounted) {

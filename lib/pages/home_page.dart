@@ -135,21 +135,17 @@ class _HomePageState extends State<HomePage> {
     return Stack(
       children: [
         Positioned.fill(child: BinMapView(bins: filteredBins)),
-        Positioned(
-          right: 16,
-          top: 16,
-          child: _buildFilterChip(context),
-        ),
+        Positioned(right: 16, top: 16, child: _buildFilterChip(context)),
       ],
     );
   }
 
   Widget _buildFilterChip(BuildContext context) {
     final typeName = _selectedBinType == 'all'
-        ? 'ทุกประเภท'
+        ? 'All Types'
         : AppTheme.getBinTypeName(_selectedBinType);
     return FilterChip(
-      label: Text('กรอง: $typeName'),
+      label: Text('Filter: $typeName'),
       selected: _selectedBinType != 'all',
       onSelected: (_) => _showFilterBottomSheet(context),
       backgroundColor: Colors.white,
@@ -158,8 +154,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildNoBinsState(BuildContext context, {String? error}) {
     final message = error != null
-        ? 'ไม่สามารถโหลดข้อมูลได้\n$error'
-        : 'ยังไม่มีถังขยะในระบบ\nเพิ่มถังขยะใหม่เพื่อเริ่มต้น';
+        ? 'Unable to load data\n$error'
+        : 'No bins in the system yet\nAdd a new bin to get started';
     return Center(
       child: Container(
         padding: const EdgeInsets.all(24),
@@ -184,7 +180,7 @@ class _HomePageState extends State<HomePage> {
             if (error != null) ...[
               const SizedBox(height: 8),
               CustomButton(
-                text: 'ลองใหม่',
+                text: 'Try Again',
                 onPressed: () => _loadBins(),
                 type: ButtonType.outline,
               ),
@@ -206,7 +202,7 @@ class _HomePageState extends State<HomePage> {
             Icon(Icons.delete_outline, size: 80, color: Colors.grey[400]),
             const SizedBox(height: 16),
             Text(
-              'ไม่พบถังขยะ',
+              'No bins found',
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(color: Colors.grey[600]),
@@ -281,7 +277,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '$count ถัง',
+                      '$count bins',
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppTheme.textSecondary,
                       ),
@@ -357,7 +353,7 @@ class _HomePageState extends State<HomePage> {
           _buildAccountMenuItem(
             context,
             Icons.person_outline,
-            'ข้อมูลส่วนตัว',
+            'Personal Information',
             onTap: () {
               Navigator.pushNamed(context, '/account');
             },
@@ -365,7 +361,7 @@ class _HomePageState extends State<HomePage> {
           _buildAccountMenuItem(
             context,
             Icons.history_outlined,
-            'ประวัติการรายงาน',
+            'Report History',
             onTap: () {
               Navigator.pushNamed(context, '/account');
             },
@@ -373,7 +369,7 @@ class _HomePageState extends State<HomePage> {
           _buildAccountMenuItem(
             context,
             Icons.settings_outlined,
-            'ตั้งค่า',
+            'Settings',
             onTap: () {
               Navigator.pushNamed(context, '/account');
             },
@@ -381,7 +377,7 @@ class _HomePageState extends State<HomePage> {
           _buildAccountMenuItem(
             context,
             Icons.logout,
-            'ออกจากระบบ',
+            'Logout',
             color: AppTheme.error,
             onTap: () {
               AuthService.logout();
@@ -418,14 +414,14 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 24),
             Text(
-              'บัญชีผู้ใช้',
+              'User Account',
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             Text(
-              'เข้าสู่ระบบเพื่อเข้าถึงฟีเจอร์ทั้งหมด',
+              'Login to access all features',
               style: Theme.of(
                 context,
               ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
@@ -433,7 +429,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 32),
             CustomButton(
-              text: 'เข้าสู่ระบบ',
+              text: 'Login',
               onPressed: () {
                 Navigator.push(
                   context,
@@ -458,7 +454,7 @@ class _HomePageState extends State<HomePage> {
                   }
                 });
               },
-              child: const Text('สมัครสมาชิก'),
+              child: const Text('Register'),
             ),
           ],
         ),
@@ -545,7 +541,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'กรองตามประเภทถังขยะ',
+                    'Filter by bin type',
                     style: Theme.of(context).textTheme.titleLarge,
                   ),
                   const SizedBox(height: 16),
@@ -560,9 +556,7 @@ class _HomePageState extends State<HomePage> {
 
                       return FilterChip(
                         label: Text(
-                          type == 'all'
-                              ? 'ทั้งหมด'
-                              : AppTheme.getBinTypeName(type),
+                          type == 'all' ? 'All' : AppTheme.getBinTypeName(type),
                         ),
                         selected: isSelected,
                         onSelected: (selected) {
@@ -587,7 +581,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   const SizedBox(height: 24),
                   CustomButton(
-                    text: 'รีเซ็ต',
+                    text: 'Reset',
                     onPressed: () {
                       setModalState(() {
                         _selectedBinType = 'all';

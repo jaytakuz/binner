@@ -90,7 +90,7 @@ class BinDetailsPage extends StatelessWidget {
 
                   // Report Button
                   CustomButton(
-                    text: 'รายงานปัญหา',
+                    text: 'Report Problem',
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -105,11 +105,13 @@ class BinDetailsPage extends StatelessWidget {
 
                   // Navigate Button
                   CustomButton(
-                    text: 'นำทางไปยังถังขยะ',
+                    text: 'Navigate to Bin',
                     onPressed: () {
                       // TODO: Implement navigation
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Opening navigation map...')),
+                        const SnackBar(
+                          content: Text('Opening navigation map...'),
+                        ),
                       );
                     },
                     type: ButtonType.outline,
@@ -144,7 +146,7 @@ class BinDetailsPage extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'ตำแหน่ง',
+                  'Location',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -155,7 +157,7 @@ class BinDetailsPage extends StatelessWidget {
             Text(bin.location, style: Theme.of(context).textTheme.bodyLarge),
             const SizedBox(height: 8),
             Text(
-              'พิกัด: ${bin.latitude.toStringAsFixed(6)}, ${bin.longitude.toStringAsFixed(6)}',
+              'Coordinates: ${bin.latitude.toStringAsFixed(6)}, ${bin.longitude.toStringAsFixed(6)}',
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
@@ -189,7 +191,7 @@ class BinDetailsPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'ประเภทถังขยะ',
+                        'Bin Type',
                         style: Theme.of(context).textTheme.titleMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
@@ -217,11 +219,12 @@ class BinDetailsPage extends StatelessWidget {
   Widget _buildBinTypeDescription(BuildContext context, String binType) {
     final descriptions = {
       'green':
-          'ขยะเปื้อนอาหาร เช่น เศษอาหาร เปลือกผัก/ผลไม้ ของเปียกที่เน่าเสียได้',
-      'yellow': 'ขยะพลาสติก เช่น ขวดน้ำพลาสติก หลอดฟัน กล่องพลาสติก',
-      'red': 'ขยะอันตราย เช่น แบตเตอรี่ หลอดไฟฟลูออเรสเซนต์ ยาสีฟัน',
-      'blue': 'ขยะกระดาษ เช่น กระดาษ นิตยสาร กล่องกระดาษ',
-      'orange': 'ขยะทั่วไป เช่น ไม้ยางจุก ถุงยางอนามัย ซิงค์หิ้ว',
+          'Food waste such as food scraps, vegetable/fruit peels, wet perishable items',
+      'yellow':
+          'Plastic waste such as plastic bottles, toothbrushes, plastic containers',
+      'red': 'Hazardous waste such as batteries, fluorescent bulbs, toothpaste',
+      'blue': 'Paper waste such as paper, magazines, cardboard boxes',
+      'orange': 'General waste such as cork, sanitary bags, sinks',
     };
 
     final description = descriptions[binType] ?? '-';
@@ -258,7 +261,7 @@ class BinDetailsPage extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'รายละเอียด',
+                  'Details',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -291,29 +294,24 @@ class BinDetailsPage extends StatelessWidget {
                     color: AppTheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Icon(Icons.person_outline, color: AppTheme.primary),
+                  child: const Icon(
+                    Icons.person_outline,
+                    color: AppTheme.primary,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'ข้อมูลผู้รายงาน',
+                  'Reporter Information',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            _buildInfoRow(
-              context,
-              label: 'ผู้รายงาน',
-              value: bin.addedByName,
-            ),
+            _buildInfoRow(context, label: 'Reporter', value: bin.addedByName),
             const SizedBox(height: 8),
-            _buildInfoRow(
-              context,
-              label: 'วันที่รายงาน',
-              value: reportedAt,
-            ),
+            _buildInfoRow(context, label: 'Report Date', value: reportedAt),
           ],
         ),
       ),
@@ -330,10 +328,9 @@ class BinDetailsPage extends StatelessWidget {
       children: [
         Text(
           label,
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium
-              ?.copyWith(color: AppTheme.textSecondary),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(color: AppTheme.textSecondary),
         ),
         const SizedBox(width: 16),
         Expanded(

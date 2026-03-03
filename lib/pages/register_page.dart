@@ -52,8 +52,8 @@ class _RegisterPageState extends State<RegisterPage> {
         SnackBar(
           content: Text(
             requiresEmailConfirm
-                ? 'สมัครสมาชิกสำเร็จ โปรดตรวจสอบอีเมลเพื่อยืนยันบัญชี'
-                : 'สมัครสมาชิกและเข้าสู่ระบบสำเร็จ',
+                ? 'Registration successful. Please check your email to confirm your account'
+                : 'Registration and login successful',
           ),
         ),
       );
@@ -64,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
       });
     } catch (error) {
       setState(() {
-        _error = 'ไม่สามารถสมัครสมาชิกได้ ($error)';
+        _error = 'Unable to register ($error)';
       });
     } finally {
       if (mounted) {

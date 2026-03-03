@@ -75,9 +75,9 @@ class _ReportPageState extends State<ReportPage> {
             _isSubmitting = false;
           });
           Navigator.pop(context);
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(const SnackBar(content: Text('Report submitted successfully')));
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Report submitted successfully')),
+          );
         }
       });
     }
@@ -86,7 +86,7 @@ class _ReportPageState extends State<ReportPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('รายงานปัญหาถังขยะ')),
+      appBar: AppBar(title: const Text('Report Bin Problem')),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -95,21 +95,21 @@ class _ReportPageState extends State<ReportPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Report Type Selection
-              _buildSectionTitle('ประเภทปัญหา'),
+              _buildSectionTitle('Problem Type'),
               const SizedBox(height: 12),
               _buildReportTypeSelector(context),
               const SizedBox(height: 24),
 
               // Description
-              _buildSectionTitle('รายละเอียดเพิ่มเติม'),
+              _buildSectionTitle('Additional Details'),
               const SizedBox(height: 12),
               CustomTextField(
                 controller: _descriptionController,
-                hint: 'อธิบายปัญหาที่พบ...',
+                hint: 'Describe the problem...',
                 maxLines: 4,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'กรุณากรอกรายละเอียด';
+                    return 'Please enter details';
                   }
                   return null;
                 },
@@ -117,14 +117,14 @@ class _ReportPageState extends State<ReportPage> {
               const SizedBox(height: 24),
 
               // Images
-              _buildSectionTitle('รูปภาพประกอบ (อย่างน้อย 1 รูป)'),
+              _buildSectionTitle('Attached Images (At least 1 image)'),
               const SizedBox(height: 12),
               _buildImageSection(context),
               const SizedBox(height: 32),
 
               // Submit Button
               CustomButton(
-                text: 'ส่งรายงาน',
+                text: 'Submit Report',
                 onPressed: _handleSubmit,
                 isLoading: _isSubmitting,
               ),
@@ -279,7 +279,7 @@ class _ReportPageState extends State<ReportPage> {
               child: OutlinedButton.icon(
                 onPressed: _handleImagePick,
                 icon: const Icon(Icons.photo_library_outlined),
-                label: const Text('เลือกรูป'),
+                label: const Text('Select Image'),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
@@ -293,7 +293,7 @@ class _ReportPageState extends State<ReportPage> {
               child: OutlinedButton.icon(
                 onPressed: _handleCameraPick,
                 icon: const Icon(Icons.camera_alt_outlined),
-                label: const Text('ถ่ายรูป'),
+                label: const Text('Take Photo'),
                 style: OutlinedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(

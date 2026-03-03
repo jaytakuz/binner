@@ -112,17 +112,17 @@ class _AddBinPageState extends State<AddBinPage> {
       _longitudeController.clear();
       _descriptionController.clear();
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('เพิ่มถังขยะเรียบร้อยแล้ว')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Bin added successfully')));
     } catch (error) {
       setState(() {
         _isSubmitting = false;
         _submissionError = error.toString();
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('ไม่สามารถเพิ่มถังขยะได้: $error')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Unable to add bin: $error')));
     }
   }
 
@@ -174,7 +174,7 @@ class _AddBinPageState extends State<AddBinPage> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'เพิ่มถังขยะใหม่',
+                    'Add New Bin',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: AppTheme.primary,
@@ -182,7 +182,7 @@ class _AddBinPageState extends State<AddBinPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'กรอกข้อมูลถังขยะที่ต้องการเพิ่ม',
+                    'Fill in the bin information to add',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppTheme.textSecondary,
                     ),
@@ -199,15 +199,15 @@ class _AddBinPageState extends State<AddBinPage> {
             const SizedBox(height: 24),
 
             // Bin Name
-            _buildSectionTitle('ชื่อถังขยะ'),
+            _buildSectionTitle('Bin Name'),
             const SizedBox(height: 12),
             CustomTextField(
               controller: _nameController,
-              hint: 'เช่น ถังขยะ คณะวิทยาศาสตร์',
+              hint: 'e.g. Waste bin Science Faculty',
               prefixIcon: Icons.delete_outline,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'กรุณากรอกชื่อถังขยะ';
+                  return 'Please enter bin name';
                 }
                 return null;
               },
@@ -215,15 +215,15 @@ class _AddBinPageState extends State<AddBinPage> {
             const SizedBox(height: 24),
 
             // Location
-            _buildSectionTitle('สถานที่ตั้ง'),
+            _buildSectionTitle('Location'),
             const SizedBox(height: 12),
             CustomTextField(
               controller: _locationController,
-              hint: 'เช่น คณะวิทยาศาสตร์ มหาวิทยาลัยเชียงใหม่',
+              hint: 'e.g. Faculty of Science, Chiang Mai University',
               prefixIcon: Icons.location_on_outlined,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'กรุณากรอกสถานที่ตั้ง';
+                  return 'Please enter location';
                 }
                 return null;
               },
@@ -234,18 +234,18 @@ class _AddBinPageState extends State<AddBinPage> {
                 Expanded(
                   child: CustomTextField(
                     controller: _latitudeController,
-                    hint: 'ละติจูด',
+                    hint: 'Latitude',
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
                     prefixIcon: Icons.explore,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'กรุณากรอกละติจูด';
+                        return 'Please enter latitude';
                       }
                       final lat = double.tryParse(value);
                       if (lat == null || lat < -90 || lat > 90) {
-                        return 'ละติจูดไม่ถูกต้อง';
+                        return 'Invalid latitude';
                       }
                       return null;
                     },
@@ -255,18 +255,18 @@ class _AddBinPageState extends State<AddBinPage> {
                 Expanded(
                   child: CustomTextField(
                     controller: _longitudeController,
-                    hint: 'ลองจิจูด',
+                    hint: 'Longitude',
                     keyboardType: const TextInputType.numberWithOptions(
                       decimal: true,
                     ),
                     prefixIcon: Icons.explore,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'กรุณากรอกลองจิจูด';
+                        return 'Please enter longitude';
                       }
                       final lng = double.tryParse(value);
                       if (lng == null || lng < -180 || lng > 180) {
-                        return 'ลองจิจูดไม่ถูกต้อง';
+                        return 'Invalid longitude';
                       }
                       return null;
                     },
@@ -278,7 +278,7 @@ class _AddBinPageState extends State<AddBinPage> {
             OutlinedButton.icon(
               onPressed: _getCurrentLocation,
               icon: const Icon(Icons.my_location),
-              label: const Text('ใช้ตำแหน่งปัจจุบัน'),
+              label: const Text('Use Current Location'),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size.fromHeight(48),
                 shape: RoundedRectangleBorder(
@@ -289,19 +289,19 @@ class _AddBinPageState extends State<AddBinPage> {
             const SizedBox(height: 24),
 
             // Description
-            _buildSectionTitle('รายละเอียดเพิ่มเติม'),
+            _buildSectionTitle('Additional Details'),
             const SizedBox(height: 12),
             CustomTextField(
               controller: _descriptionController,
-              hint: 'อธิบายลักษณะถังขยะโดยย่อ',
+              hint: 'Briefly describe the bin',
               prefixIcon: Icons.description_outlined,
               maxLines: 3,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'กรุณากรอกรายละเอียดสั้น ๆ';
+                  return 'Please enter brief details';
                 }
                 if (value.length < 10) {
-                  return 'รายละเอียดควรมีอย่างน้อย 10 ตัวอักษร';
+                  return 'Details should be at least 10 characters';
                 }
                 return null;
               },
@@ -309,13 +309,13 @@ class _AddBinPageState extends State<AddBinPage> {
             const SizedBox(height: 24),
 
             // Image Upload
-            _buildSectionTitle('อัปโหลดรูปภาพถังขยะ'),
+            _buildSectionTitle('Upload Bin Image'),
             const SizedBox(height: 12),
             _buildImageUploader(context),
             const SizedBox(height: 24),
 
             // Bin Type
-            _buildSectionTitle('ประเภทถังขยะ'),
+            _buildSectionTitle('Bin Type'),
             const SizedBox(height: 12),
             _buildBinTypeSelector(context),
             const SizedBox(height: 32),
@@ -331,7 +331,7 @@ class _AddBinPageState extends State<AddBinPage> {
 
             // Submit Button
             CustomButton(
-              text: 'บันทึกถังขยะ',
+              text: 'Save Bin',
               onPressed: _isSubmitting
                   ? null
                   : () async {
@@ -366,12 +366,15 @@ class _AddBinPageState extends State<AddBinPage> {
                     color: AppTheme.primary.withOpacity(0.2),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.lock_outline, color: AppTheme.primary),
+                  child: const Icon(
+                    Icons.lock_outline,
+                    color: AppTheme.primary,
+                  ),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'เข้าสู่ระบบเพื่อเพิ่มถังขยะ',
+                    'Login to add bin',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -381,14 +384,14 @@ class _AddBinPageState extends State<AddBinPage> {
             ),
             const SizedBox(height: 12),
             Text(
-              'ข้อมูลผู้เพิ่มถังขยะจะถูกใช้เป็นผู้รายงาน',
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.textSecondary,
-                  ),
+              'User information will be used as reporter',
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
             ),
             const SizedBox(height: 12),
             CustomButton(
-              text: 'เข้าสู่ระบบ',
+              text: 'Login',
               onPressed: () async => _promptLogin(),
               icon: Icons.login,
               type: ButtonType.outline,
@@ -410,7 +413,7 @@ class _AddBinPageState extends State<AddBinPage> {
         title: Text(user.name),
         subtitle: Text(user.email),
         trailing: Chip(
-          label: const Text('ผู้รายงาน'),
+          label: const Text('Reporter'),
           backgroundColor: AppTheme.primary.withOpacity(0.1),
           labelStyle: const TextStyle(color: AppTheme.primary),
         ),
@@ -436,29 +439,27 @@ class _AddBinPageState extends State<AddBinPage> {
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.image_outlined,
-                            size: 48, color: AppTheme.textSecondary),
+                        Icon(
+                          Icons.image_outlined,
+                          size: 48,
+                          color: AppTheme.textSecondary,
+                        ),
                         const SizedBox(height: 12),
                         Text(
-                          'แตะเพื่อเลือกรูปภาพ',
+                          'Tap to select image',
                           style: Theme.of(context).textTheme.bodyMedium,
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'รองรับไฟล์ JPG, PNG',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
+                          'Supports JPG, PNG files',
+                          style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(color: AppTheme.textSecondary),
                         ),
                       ],
                     )
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      child: Image.file(
-                        _selectedImage!,
-                        fit: BoxFit.cover,
-                      ),
+                      child: Image.file(_selectedImage!, fit: BoxFit.cover),
                     ),
             ),
           ),
@@ -470,7 +471,7 @@ class _AddBinPageState extends State<AddBinPage> {
               child: OutlinedButton.icon(
                 onPressed: () => _pickImage(ImageSource.camera),
                 icon: const Icon(Icons.photo_camera_outlined),
-                label: const Text('ถ่ายภาพ'),
+                label: const Text('Take Photo'),
               ),
             ),
             const SizedBox(width: 12),
@@ -478,7 +479,7 @@ class _AddBinPageState extends State<AddBinPage> {
               child: OutlinedButton.icon(
                 onPressed: () => _pickImage(ImageSource.gallery),
                 icon: const Icon(Icons.photo_library_outlined),
-                label: const Text('เลือกรูป'),
+                label: const Text('Select Image'),
               ),
             ),
           ],

@@ -197,26 +197,26 @@ class AppTheme {
     }
   }
 
-  // Bin type names (Thai)
+  // Bin type names (English)
   static String getBinTypeName(String binType) {
     switch (binType.toLowerCase()) {
       case 'green':
       case 'wet':
       case 'food':
-        return 'ขยะเปื้อนอาหาร/เปียก';
+        return 'Food Waste/Wet';
       case 'yellow':
       case 'plastic':
-        return 'ขยะพลาสติก';
+        return 'Plastic Waste';
       case 'red':
       case 'hazardous':
-        return 'ขยะอันตราย';
+        return 'Hazardous Waste';
       case 'blue':
       case 'paper':
-        return 'ขยะกระดาษ';
+        return 'Paper Waste';
       case 'orange':
       case 'general':
       case 'other':
-        return 'ขยะทั่วไป';
+        return 'General Waste';
       default:
         return binType;
     }
