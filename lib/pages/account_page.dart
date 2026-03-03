@@ -32,6 +32,7 @@ class _AccountPageState extends State<AccountPage> {
     _authSubscription?.cancel();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     // Show login prompt if not logged in
@@ -42,7 +43,6 @@ class _AccountPageState extends State<AccountPage> {
     final user = AuthService.currentUser!;
     final userName = user.name;
     final userEmail = user.email;
-    final userPhone = user.phone ?? '-';
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Account')),

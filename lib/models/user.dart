@@ -2,7 +2,6 @@ class User {
   final String id;
   final String email;
   final String name;
-  final String? phone;
   final String? profileImage;
   final DateTime createdAt;
 
@@ -10,7 +9,6 @@ class User {
     required this.id,
     required this.email,
     required this.name,
-    this.phone,
     this.profileImage,
     required this.createdAt,
   });
