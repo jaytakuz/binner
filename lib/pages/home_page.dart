@@ -369,14 +369,6 @@ class _HomePageState extends State<HomePage> {
           ),
           _buildAccountMenuItem(
             context,
-            Icons.history_outlined,
-            'Report History',
-            onTap: () {
-              Navigator.pushNamed(context, '/account');
-            },
-          ),
-          _buildAccountMenuItem(
-            context,
             Icons.settings_outlined,
             'Settings',
             onTap: () {

@@ -56,18 +56,6 @@ class _AccountPageState extends State<AccountPage> {
 
             _buildMenuSection(context, [
               _MenuItem(
-                icon: Icons.notifications_outlined,
-                title: 'Notifications',
-                trailing: Switch(
-                  value: _notificationsEnabled,
-                  onChanged: (value) {
-                    setState(() {
-                      _notificationsEnabled = value;
-                    });
-                  },
-                ),
-              ),
-              _MenuItem(
                 icon: Icons.info_outline,
                 title: 'About App',
                 onTap: () {

@@ -10,10 +10,9 @@ Flutter project for **953464 — Mobile App Dev course**
 - 662115047	Watcharapong	Wanna
 # Key Features:
 1. **Interactive Bin Locator**: Helps students, staff, and visitors easily find the nearest available trash bins and recycling drop-off points across the CMU campus using an interactive map.
-2. **Crowdsourced Mapping & Reporting**: Empowers the campus community to collectively map new trash bin locations, update bin statuses (e.g., empty or full), and report overflowing bins or illegal dumping by capturing photos. This ensures that everyone stays up-to-date on bin availability.
+2. **Crowdsourced Mapping**: Empowers the campus community to collectively map new trash bin locations and update bin details so everyone stays up to date on availability.
 3. **Waste Separation Guidelines**: Provides comprehensive information on different types of waste (such as general waste, recyclables, compost, and hazardous waste) to encourage proper waste sorting at the source.
-4. **Direct Issue Reporting**: Users can notify campus management or relevant authorities about damaged facilities or scattered waste outside designated areas, facilitating faster cleanup efforts.
-5. **User-Friendly Interface**: Developed from the ground up with Flutter, providing a fast, simple, and highly responsive experience for all users.
+4. **User-Friendly Interface**: Developed from the ground up with Flutter, providing a fast, simple, and highly responsive experience for all users.
 
 ## Local environment setup
 
