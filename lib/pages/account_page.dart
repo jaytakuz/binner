@@ -175,22 +175,6 @@ class _AccountPageState extends State<AccountPage> {
                 backgroundColor: Colors.white,
                 child: Icon(Icons.person, size: 60, color: AppTheme.primary),
               ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.camera_alt_outlined,
-                    size: 20,
-                    color: AppTheme.primary,
-                  ),
-                ),
-              ),
             ],
           ),
           const SizedBox(height: 16),
