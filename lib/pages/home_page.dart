@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:binner/pages/register_page.dart';
 import 'package:binner/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import '../themes/app_theme.dart';
@@ -367,7 +368,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => const RegisterPage()),
                 ).then((result) {
                   if (result == true) {
                     setState(() {}); // Refresh to check login status

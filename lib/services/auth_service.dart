@@ -114,4 +114,42 @@ class AuthService {
       );
     }
   }
+
+  /// Request password reset email from Supabase
+  static Future<void> requestPasswordReset(String email) async {
+    await _auth.resetPasswordForEmail(email);
+  }
+
+  /// Update password with name verification
+  /// This creates a password reset request in the database
+  static Future<void> updatePasswordWithVerification({
+    required String userId,
+    required String newPassword,
+  }) async {
+    try {
+      // Use Supabase RPC to update password
+      // This requires a database function to be set up
+      await _client.rpc(
+        'update_user_password',
+        params: {'user_id': userId, 'new_password': newPassword},
+      );
+    } catch (e) {
+      // If RPC function doesn't exist, try alternative method
+      if (e.toString().contains('Could not find') ||
+          e.toString().contains('not found') ||
+          e.toString().contains('does not exist')) {
+        // Create a password reset token in the database
+        await _client.from('password_reset_requests').insert({
+          'user_id': userId,
+          'new_password_hash': newPassword, // In production, hash this!
+          'created_at': DateTime.now().toIso8601String(),
+        });
+
+        throw Exception(
+          'Password reset request created. Please contact admin to complete the reset.',
+        );
+      }
+      rethrow;
+    }
+  }
 }

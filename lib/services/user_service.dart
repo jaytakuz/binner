@@ -89,4 +89,20 @@ class UserService {
       return false;
     }
   }
+
+  /// Get user profile by email
+  static Future<app_models.User?> getProfileByEmail(String email) async {
+    try {
+      final response = await _client
+          .from(_tableName)
+          .select()
+          .eq('email', email)
+          .maybeSingle();
+
+      if (response == null) return null;
+      return app_models.User.fromJson(response);
+    } catch (e) {
+      return null;
+    }
+  }
 }
