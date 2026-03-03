@@ -1,9 +1,14 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../themes/app_theme.dart';
 import '../widgets/custom_button.dart';
 import '../services/auth_service.dart';
+import '../services/user_service.dart';
+import '../services/supabase_service.dart';
 import 'login_page.dart';
 
 class AccountPage extends StatefulWidget {
@@ -16,6 +21,9 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   StreamSubscription? _authSubscription;
   bool _notificationsEnabled = true;
+  bool _uploadingImage = false;
+  final ImagePicker _imagePicker = ImagePicker();
+  bool _loadingProfile = false;
 
   @override
   void initState() {
@@ -32,6 +40,127 @@ class _AccountPageState extends State<AccountPage> {
     _authSubscription?.cancel();
     super.dispose();
   }
+
+  Future<void> _pickAndUploadImage() async {
+    try {
+      // Show options dialog
+      final ImageSource? source = await showModalBottomSheet<ImageSource>(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        builder: (context) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Choose Photo Source',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16),
+                ListTile(
+                  leading: const Icon(Icons.photo_library),
+                  title: const Text('Gallery'),
+                  onTap: () => Navigator.pop(context, ImageSource.gallery),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.camera_alt),
+                  title: const Text('Camera'),
+                  onTap: () => Navigator.pop(context, ImageSource.camera),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+
+      if (source == null) return;
+
+      // Pick image
+      final XFile? image = await _imagePicker.pickImage(
+        source: source,
+        maxWidth: 512,
+        maxHeight: 512,
+        imageQuality: 75,
+      );
+
+      if (image == null) return;
+
+      setState(() {
+        _uploadingImage = true;
+      });
+
+      // Upload to Supabase Storage
+      final user = AuthService.currentUser;
+      if (user == null) throw Exception('User not logged in');
+
+      final fileName =
+          'profile_${user.id}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final imageFile = File(image.path);
+      final bytes = await imageFile.readAsBytes();
+
+      // Upload to Supabase Storage
+      final storagePath = await SupabaseService.client.storage
+          .from('profileImage')
+          .uploadBinary(
+            fileName,
+            bytes,
+            fileOptions: const FileOptions(
+              upsert: true,
+              contentType: 'image/jpeg',
+            ),
+          );
+
+      // Get public URL
+      final imageUrl = SupabaseService.client.storage
+          .from('profileImage')
+          .getPublicUrl(fileName);
+
+      // Check if profile exists, create or update
+      final profileExists = await UserService.profileExists(user.id);
+      if (profileExists) {
+        await UserService.updateProfile(
+          userId: user.id,
+          profileImage: imageUrl,
+        );
+      } else {
+        await UserService.createProfile(
+          userId: user.id,
+          email: user.email,
+          name: user.name,
+          profileImage: imageUrl,
+        );
+      }
+
+      // Update auth metadata
+      await SupabaseService.client.auth.updateUser(
+        UserAttributes(data: {'avatar_url': imageUrl}),
+      );
+
+      setState(() {
+        _uploadingImage = false;
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile picture updated successfully')),
+        );
+      }
+    } catch (e) {
+      setState(() {
+        _uploadingImage = false;
+      });
+
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Failed to upload image: $e')));
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Show login prompt if not logged in
@@ -146,57 +275,95 @@ class _AccountPageState extends State<AccountPage> {
     String userName,
     String userEmail,
   ) {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: AppTheme.primary,
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
-      ),
-      child: Column(
-        children: [
-          // Profile Avatar
-          Stack(
+    return FutureBuilder(
+      future: AuthService.getUserProfile(),
+      builder: (context, snapshot) {
+        final profileImageUrl = snapshot.data?.profileImage;
+
+        return Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: AppTheme.primary,
+            borderRadius: const BorderRadius.vertical(
+              bottom: Radius.circular(24),
+            ),
+          ),
+          child: Column(
             children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.white,
-                child: Icon(Icons.person, size: 60, color: AppTheme.primary),
+              // Profile Avatar
+              Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundColor: Colors.white,
+                    backgroundImage:
+                        profileImageUrl != null && profileImageUrl.isNotEmpty
+                        ? NetworkImage(profileImageUrl)
+                        : null,
+                    child: profileImageUrl == null || profileImageUrl.isEmpty
+                        ? Icon(Icons.person, size: 60, color: AppTheme.primary)
+                        : _uploadingImage
+                        ? const CircularProgressIndicator()
+                        : null,
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: InkWell(
+                      onTap: _uploadingImage ? null : _pickAndUploadImage,
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: _uploadingImage ? Colors.grey : Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: _uploadingImage
+                            ? SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    AppTheme.primary,
+                                  ),
+                                ),
+                              )
+                            : Icon(
+                                Icons.camera_alt_outlined,
+                                size: 20,
+                                color: AppTheme.primary,
+                              ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    Icons.camera_alt_outlined,
-                    size: 20,
-                    color: AppTheme.primary,
-                  ),
+              const SizedBox(height: 16),
+              Text(
+                userName,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                userEmail,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Colors.white.withOpacity(0.8),
                 ),
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          Text(
-            userName,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            userEmail,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Colors.white.withOpacity(0.8),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 

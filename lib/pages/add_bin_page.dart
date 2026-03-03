@@ -445,21 +445,34 @@ class _AddBinPageState extends State<AddBinPage> {
   }
 
   Widget _buildAdderInfoCard(BuildContext context) {
-    final user = AuthService.currentUser!;
-    return Card(
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: AppTheme.primary.withOpacity(0.1),
-          child: const Icon(Icons.person, color: AppTheme.primaryDark),
-        ),
-        title: Text(user.name),
-        subtitle: Text(user.email),
-        trailing: Chip(
-          label: const Text('Adder'),
-          backgroundColor: AppTheme.primary.withOpacity(0.1),
-          labelStyle: const TextStyle(color: AppTheme.primary),
-        ),
-      ),
+    return FutureBuilder(
+      future: AuthService.getUserProfile(),
+      builder: (context, snapshot) {
+        final user = snapshot.data ?? AuthService.currentUser!;
+        final profileImageUrl = user.profileImage;
+
+        return Card(
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundColor: AppTheme.primary.withOpacity(0.1),
+              backgroundImage:
+                  profileImageUrl != null && profileImageUrl.isNotEmpty
+                  ? NetworkImage(profileImageUrl)
+                  : null,
+              child: profileImageUrl == null || profileImageUrl.isEmpty
+                  ? const Icon(Icons.person, color: AppTheme.primaryDark)
+                  : null,
+            ),
+            title: Text(user.name),
+            subtitle: Text(user.email),
+            trailing: Chip(
+              label: const Text('Adder'),
+              backgroundColor: AppTheme.primary.withOpacity(0.1),
+              labelStyle: const TextStyle(color: AppTheme.primary),
+            ),
+          ),
+        );
+      },
     );
   }
 

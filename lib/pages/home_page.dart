@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:binner/pages/register_page.dart';
 import 'package:binner/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import '../themes/app_theme.dart';
@@ -318,79 +319,7 @@ class _HomePageState extends State<HomePage> {
 
     final user = AuthService.currentUser;
 
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          // Profile Header
-          Container(
-            padding: const EdgeInsets.all(24),
-            decoration: BoxDecoration(
-              color: AppTheme.primary,
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(24),
-              ),
-            ),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person, size: 60, color: AppTheme.primary),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  AuthService.currentUser?.name ?? 'User',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  AuthService.currentUser?.email ?? '-',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.white.withOpacity(0.8),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
-          // Menu items
-          _buildAccountMenuItem(
-            context,
-            Icons.person_outline,
-            'Personal Information',
-            onTap: () {
-              Navigator.pushNamed(context, '/account');
-            },
-          ),
-          _buildAccountMenuItem(
-            context,
-            Icons.settings_outlined,
-            'Settings',
-            onTap: () {
-              Navigator.pushNamed(context, '/account');
-            },
-          ),
-          _buildAccountMenuItem(
-            context,
-            Icons.logout,
-            'Logout',
-            color: AppTheme.error,
-            onTap: () {
-              AuthService.logout();
-              setState(() {});
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Logged out successfully')),
-              );
-            },
-          ),
-        ],
-      ),
-    );
+    return _buildAccountView(context);
   }
 
   // Guest account view - shows login prompt
@@ -448,7 +377,7 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                  MaterialPageRoute(builder: (context) => const RegisterPage()),
                 ).then((result) {
                   if (result == true) {
                     setState(() {}); // Refresh to check login status
