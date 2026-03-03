@@ -18,7 +18,7 @@ class UserService {
       'id': userId,
       'email': email,
       'name': name,
-      'profile_image': profileImage,
+      'images_url': profileImage,
       'created_at': now.toIso8601String(),
       'updated_at': now.toIso8601String(),
     };
@@ -58,7 +58,7 @@ class UserService {
     };
 
     if (name != null) data['name'] = name;
-    if (profileImage != null) data['profile_image'] = profileImage;
+    if (profileImage != null) data['images_url'] = profileImage;
 
     final response = await _client
         .from(_tableName)

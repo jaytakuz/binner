@@ -18,7 +18,7 @@ class User {
       id: json['id'] as String,
       email: json['email'] as String,
       name: json['name'] as String,
-      profileImage: json['profile_image'] as String?,
+      profileImage: json['images_url'] as String?,
       createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
@@ -28,7 +28,7 @@ class User {
       'id': id,
       'email': email,
       'name': name,
-      'profile_image': profileImage,
+      'images_url': profileImage,
       'created_at': createdAt.toIso8601String(),
     };
   }
