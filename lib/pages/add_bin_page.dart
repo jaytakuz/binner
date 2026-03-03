@@ -12,7 +12,8 @@ import '../services/auth_service.dart';
 import '../services/bin_service.dart';
 
 class AddBinPage extends StatefulWidget {
-  const AddBinPage({super.key});
+  final VoidCallback? onBinAdded;
+  const AddBinPage({super.key, this.onBinAdded});
 
   @override
   State<AddBinPage> createState() => _AddBinPageState();
@@ -116,6 +117,8 @@ class _AddBinPageState extends State<AddBinPage> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Bin added successfully')));
+      widget.onBinAdded?.call();
+      Navigator.of(context).maybePop();
     } catch (error) {
       setState(() {
         _isSubmitting = false;

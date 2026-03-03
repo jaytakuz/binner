@@ -74,6 +74,11 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Binner'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: _loadBins,
+            tooltip: 'Refresh bins',
+          ),
+          IconButton(
             icon: const Icon(Icons.filter_list),
             onPressed: () {
               _showFilterBottomSheet(context);
@@ -293,7 +298,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildAddBinView(BuildContext context) {
-    return const AddBinPage();
+    return AddBinPage(
+      onBinAdded: () {
+        _loadBins();
+      },
+    );
   }
 
   Widget _buildAccountView(BuildContext context) {
@@ -488,6 +497,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> _loadBins() async {
+    if (mounted) {
+      setState(() {
+        _isLoadingBins = true;
+        _binError = null;
+      });
+    }
     try {
       final bins = await BinService.fetchBins();
       if (!mounted) return;
