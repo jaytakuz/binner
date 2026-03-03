@@ -7,7 +7,6 @@ import 'pages/register_page.dart';
 import 'pages/home_page.dart';
 import 'pages/account_page.dart';
 import 'pages/bin_details_page.dart';
-import 'pages/report_page.dart';
 import 'pages/add_bin_page.dart';
 import 'models/bin.dart';
 Future<void> main() async  {
@@ -48,9 +47,6 @@ class MyApp extends StatelessWidget {
           return MaterialPageRoute(
             builder: (context) => BinDetailsPage(bin: bin),
           );
-        }
-        if (settings.name == '/report') {
-          return MaterialPageRoute(builder: (context) => const ReportPage());
         }
         if (settings.name == '/add_bin') {
           return MaterialPageRoute(builder: (context) => const AddBinPage());

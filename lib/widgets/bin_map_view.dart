@@ -237,7 +237,7 @@ class _BinMapViewState extends State<BinMapView> {
   }
 
   String _formatDistance(double m) =>
-      m < 1000 ? '${m.round()} ม.' : '${(m / 1000).toStringAsFixed(1)} กม.';
+      m < 1000 ? '${m.round()} m.' : '${(m / 1000).toStringAsFixed(1)} km.';
 
   // ── Build ────────────────────────────────────────────────────────────────────
   @override
@@ -266,7 +266,7 @@ class _BinMapViewState extends State<BinMapView> {
                 SizedBox(width: 14, height: 14,
                     child: CircularProgressIndicator(strokeWidth: 2)),
                 SizedBox(width: 8),
-                Text('กำลังคำนวณเส้นทาง…', style: TextStyle(fontSize: 13)),
+                Text('Calculating route...', style: TextStyle(fontSize: 13)),
               ],
             )),
           ),
@@ -394,7 +394,7 @@ class _BinInfoCard extends StatelessWidget {
             Expanded(child: OutlinedButton.icon(
               onPressed: onViewDetails,
               icon: const Icon(Icons.info_outline, size: 17),
-              label: const Text('รายละเอียด'),
+              label: const Text('Details'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: AppTheme.primary,
                 side: BorderSide(color: AppTheme.primary),
@@ -406,7 +406,7 @@ class _BinInfoCard extends StatelessWidget {
             Expanded(child: ElevatedButton.icon(
               onPressed: onNavigate,
               icon: const Icon(Icons.navigation, size: 17),
-              label: const Text('นำทาง'),
+              label: const Text('Navigate'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.primary,
                 foregroundColor: Colors.white,
@@ -458,8 +458,8 @@ class _MapLegend extends StatefulWidget {
 class _MapLegendState extends State<_MapLegend> {
   bool _open = false;
   static const _entries = [
-    ('green', 'ขยะเปียก'), ('yellow', 'พลาสติก'),
-    ('red', 'อันตราย'), ('blue', 'กระดาษ'), ('orange', 'ทั่วไป'),
+    ('green', 'Wet Waste'), ('yellow', 'Plastic'),
+    ('red', 'Hazardous'), ('blue', 'Paper'), ('orange', 'General'),
   ];
   @override
   Widget build(BuildContext context) => GestureDetector(
@@ -476,7 +476,7 @@ class _MapLegendState extends State<_MapLegend> {
           Row(mainAxisSize: MainAxisSize.min, children: [
             const Icon(Icons.layers_outlined, size: 15),
             const SizedBox(width: 4),
-            const Text('สัญลักษณ์',
+            const Text('Legend',
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
             Icon(_open ? Icons.expand_less : Icons.expand_more, size: 15),
           ]),

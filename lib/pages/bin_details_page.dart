@@ -3,7 +3,6 @@ import 'package:intl/intl.dart';
 import '../themes/app_theme.dart';
 import '../models/bin.dart';
 import '../widgets/custom_button.dart';
-import 'report_page.dart';
 
 class BinDetailsPage extends StatelessWidget {
   final Bin bin;
@@ -23,7 +22,6 @@ class BinDetailsPage extends StatelessWidget {
             expandedHeight: 250,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(bin.name),
               background: Stack(
                 fit: StackFit.expand,
                 children: [
@@ -53,13 +51,6 @@ class BinDetailsPage extends StatelessWidget {
                         );
                       },
                     ),
-                  Center(
-                    child: Icon(
-                      Icons.delete_outline,
-                      size: 100,
-                      color: Colors.white.withOpacity(0.3),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -71,12 +62,16 @@ class BinDetailsPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    bin.name,
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                          color: AppTheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  const SizedBox(height: 16),
                   // Location Card
                   _buildLocationCard(context, binColor),
-                  const SizedBox(height: 20),
-
-                  // Reporter Info
-                  _buildReporterCard(context, reportedAt),
                   const SizedBox(height: 20),
 
                   // Bin Type Info
@@ -88,19 +83,8 @@ class BinDetailsPage extends StatelessWidget {
                     _buildDescriptionCard(context),
                   const SizedBox(height: 20),
 
-                  // Report Button
-                  CustomButton(
-                    text: 'Report Problem',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ReportPage(binId: bin.id),
-                        ),
-                      );
-                    },
-                    icon: Icons.report_problem_outlined,
-                  ),
+                  // Reporter Info
+                  _buildReporterCard(context, reportedAt),
                   const SizedBox(height: 20),
 
                   // Navigate Button
