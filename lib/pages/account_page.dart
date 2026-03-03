@@ -42,7 +42,6 @@ class _AccountPageState extends State<AccountPage> {
     final user = AuthService.currentUser!;
     final userName = user.name;
     final userEmail = user.email;
-    final userPhone = user.phone ?? '-';
 
     return Scaffold(
       appBar: AppBar(title: const Text('My Account')),

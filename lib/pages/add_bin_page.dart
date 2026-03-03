@@ -198,7 +198,28 @@ class _AddBinPageState extends State<AddBinPage> {
               _buildAdderInfoCard(context),
             const SizedBox(height: 24),
 
-            // Bin Name
+            // Image Upload
+            _buildSectionTitle('Upload Bin Image'),
+            const SizedBox(height: 12),
+            _buildImageUploader(context),
+            const SizedBox(height: 24),
+
+            // Bin Type
+            _buildSectionTitle('Bin Type'),
+            const SizedBox(height: 12),
+            _buildBinTypeSelector(context),
+            const SizedBox(height: 32),
+
+            if (_submissionError != null)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  _submissionError!,
+                  style: TextStyle(color: AppTheme.error),
+                ),
+              ),
+
+              // Bin Name
             _buildSectionTitle('Bin Name'),
             const SizedBox(height: 12),
             CustomTextField(
@@ -308,27 +329,6 @@ class _AddBinPageState extends State<AddBinPage> {
             ),
             const SizedBox(height: 24),
 
-            // Image Upload
-            _buildSectionTitle('Upload Bin Image'),
-            const SizedBox(height: 12),
-            _buildImageUploader(context),
-            const SizedBox(height: 24),
-
-            // Bin Type
-            _buildSectionTitle('Bin Type'),
-            const SizedBox(height: 12),
-            _buildBinTypeSelector(context),
-            const SizedBox(height: 32),
-
-            if (_submissionError != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Text(
-                  _submissionError!,
-                  style: TextStyle(color: AppTheme.error),
-                ),
-              ),
-
             // Submit Button
             CustomButton(
               text: 'Save Bin',
@@ -413,7 +413,7 @@ class _AddBinPageState extends State<AddBinPage> {
         title: Text(user.name),
         subtitle: Text(user.email),
         trailing: Chip(
-          label: const Text('Reporter'),
+          label: const Text('Adder'),
           backgroundColor: AppTheme.primary.withOpacity(0.1),
           labelStyle: const TextStyle(color: AppTheme.primary),
         ),
