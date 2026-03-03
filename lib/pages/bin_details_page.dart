@@ -12,7 +12,7 @@ class BinDetailsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final binColor = AppTheme.getBinColor(bin.binType);
-    final reportedAt = DateFormat('dd MMM yyyy HH:mm').format(bin.createdAt);
+    final addedAt = DateFormat('dd MMM yyyy HH:mm').format(bin.createdAt);
 
     return Scaffold(
       body: CustomScrollView(
@@ -83,8 +83,8 @@ class BinDetailsPage extends StatelessWidget {
                     _buildDescriptionCard(context),
                   const SizedBox(height: 20),
 
-                  // Reporter Info
-                  _buildReporterCard(context, reportedAt),
+                  // Added By Info
+                  _buildAddedByCard(context, addedAt),
                   const SizedBox(height: 20),
 
                   // Navigate Button
@@ -263,7 +263,7 @@ class BinDetailsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildReporterCard(BuildContext context, String reportedAt) {
+  Widget _buildAddedByCard(BuildContext context, String addedAt) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -285,7 +285,7 @@ class BinDetailsPage extends StatelessWidget {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  'Reporter Information',
+                  'Added By Information',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -293,9 +293,9 @@ class BinDetailsPage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            _buildInfoRow(context, label: 'Reporter', value: bin.addedByName),
+            _buildInfoRow(context, label: 'Added By', value: bin.addedByName),
             const SizedBox(height: 8),
-            _buildInfoRow(context, label: 'Report Date', value: reportedAt),
+            _buildInfoRow(context, label: 'Added Date', value: addedAt),
           ],
         ),
       ),

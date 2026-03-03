@@ -426,7 +426,7 @@ class _AddBinPageState extends State<AddBinPage> {
             ),
             const SizedBox(height: 12),
             Text(
-              'User information will be used as reporter',
+              'User information will be used as adder',
               style: Theme.of(
                 context,
               ).textTheme.bodySmall?.copyWith(color: AppTheme.textSecondary),
