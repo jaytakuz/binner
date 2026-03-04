@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Waste Bin Colors (Thai waste separation standard)
@@ -25,8 +26,58 @@ class AppTheme {
   static const Color textHint = Color(0xFF9E9E9E);
 
   static ThemeData get lightTheme {
+    final textTheme = GoogleFonts.interTextTheme();
     return ThemeData(
       useMaterial3: true,
+      textTheme: textTheme.copyWith(
+        displayLarge: textTheme.displayLarge?.copyWith(
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+          color: textPrimary,
+        ),
+        displayMedium: textTheme.displayMedium?.copyWith(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+          color: textPrimary,
+        ),
+        displaySmall: textTheme.displaySmall?.copyWith(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: textPrimary,
+        ),
+        headlineMedium: textTheme.headlineMedium?.copyWith(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: textPrimary,
+        ),
+        headlineSmall: textTheme.headlineSmall?.copyWith(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: textPrimary,
+        ),
+        titleLarge: textTheme.titleLarge?.copyWith(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: textPrimary,
+        ),
+        titleMedium: textTheme.titleMedium?.copyWith(
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+          color: textPrimary,
+        ),
+        bodyLarge: textTheme.bodyLarge?.copyWith(
+          fontSize: 16,
+          color: textPrimary,
+        ),
+        bodyMedium: textTheme.bodyMedium?.copyWith(
+          fontSize: 14,
+          color: textPrimary,
+        ),
+        bodySmall: textTheme.bodySmall?.copyWith(
+          fontSize: 12,
+          color: textSecondary,
+        ),
+      ),
       colorScheme: ColorScheme.fromSeed(
         seedColor: primary,
         primary: primary,
@@ -36,12 +87,12 @@ class AppTheme {
         brightness: Brightness.light,
       ),
       scaffoldBackgroundColor: background,
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
         backgroundColor: primary,
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-        titleTextStyle: TextStyle(
+        titleTextStyle: GoogleFonts.inter(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: Colors.white,
@@ -128,46 +179,6 @@ class AppTheme {
         color: Color(0xFFE0E0E0),
         thickness: 1,
         space: 1,
-      ),
-      textTheme: const TextTheme(
-        displayLarge: TextStyle(
-          fontSize: 32,
-          fontWeight: FontWeight.bold,
-          color: textPrimary,
-        ),
-        displayMedium: TextStyle(
-          fontSize: 28,
-          fontWeight: FontWeight.bold,
-          color: textPrimary,
-        ),
-        displaySmall: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: textPrimary,
-        ),
-        headlineMedium: TextStyle(
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: textPrimary,
-        ),
-        headlineSmall: TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.w600,
-          color: textPrimary,
-        ),
-        titleLarge: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500,
-          color: textPrimary,
-        ),
-        titleMedium: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w500,
-          color: textPrimary,
-        ),
-        bodyLarge: TextStyle(fontSize: 16, color: textPrimary),
-        bodyMedium: TextStyle(fontSize: 14, color: textPrimary),
-        bodySmall: TextStyle(fontSize: 12, color: textSecondary),
       ),
     );
   }
