@@ -187,17 +187,13 @@ class _LoginPageState extends State<LoginPage> {
   Widget _buildHeader(BuildContext context) {
     return Column(
       children: [
-        Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(
-            color: AppTheme.primary,
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: const Icon(
-            Icons.delete_outline,
-            size: 60,
-            color: Colors.white,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: Image.asset(
+            'assets/icons/bin_logo.png',
+            width: 120,
+            height: 120,
+            fit: BoxFit.cover,
           ),
         ),
         const SizedBox(height: 24),
