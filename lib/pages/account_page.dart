@@ -531,7 +531,7 @@ class _AccountPageState extends State<AccountPage> {
                   style: TextStyle(fontSize: 12, height: 1.5),
                 ),
                 const SizedBox(height: 16),
-                const Text('© 2026 Binner Team'),
+                const Text('© 2026 Pentagon Team (Binner createors)'),
               ],
             ),
           ),
