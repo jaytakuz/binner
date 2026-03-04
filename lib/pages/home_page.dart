@@ -23,17 +23,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  final List<String> _pages = ['map', 'add_bin', 'account'];
+  // final List<String> _pages = ['map', 'add_bin', 'account'];
   List<Bin> _bins = [];
   bool _isLoadingBins = true;
   String? _binError;
   StreamSubscription<List<Bin>>? _binSubscription;
   StreamSubscription? _authSubscription;
-
-  int get _adjustedIndex {
-    if (_selectedIndex >= 1) return _selectedIndex - 1;
-    return _selectedIndex;
-  }
 
   @override
   void initState() {
@@ -413,6 +408,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         _isLoadingBins = true;
         _binError = null;
+        _selectedBinType = 'all';
       });
     }
     try {
