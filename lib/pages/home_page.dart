@@ -138,12 +138,7 @@ class _HomePageState extends State<HomePage> {
       return _buildNoBinsState(context);
     }
 
-    return Stack(
-      children: [
-        Positioned.fill(child: BinMapView(bins: filteredBins)),
-        Positioned(right: 16, top: 16, child: _buildFilterChip(context)),
-      ],
-    );
+    return BinMapView(bins: filteredBins);
   }
 
   Widget _buildFilterChip(BuildContext context) {
