@@ -90,14 +90,7 @@ class BinDetailsPage extends StatelessWidget {
                   // Navigate Button
                   CustomButton(
                     text: 'Navigate to Bin',
-                    onPressed: () {
-                      // TODO: Implement navigation
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Opening navigation map...'),
-                        ),
-                      );
-                    },
+                    onPressed: () => Navigator.pop(context, bin),
                     type: ButtonType.outline,
                     icon: Icons.navigation_outlined,
                   ),

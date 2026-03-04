@@ -124,8 +124,20 @@ class _BinMapViewState extends State<BinMapView> {
     }
   }
 
-  // ── Select bin → focus + route ───────────────────────────────────────────────
-  Future<void> _selectBin(Bin bin) async {
+  // ── Select bin → focus only, no route ─────────────────────────────────────
+  void _selectBin(Bin bin) {
+    setState(() {
+      _selectedBin = bin;
+      _polylines.clear();
+      _isLoadingRoute = false;
+    });
+    _mapController?.animateCamera(
+      CameraUpdate.newLatLngZoom(LatLng(bin.latitude, bin.longitude), 16),
+    );
+  }
+
+  // ── Navigate to bin → focus + draw route ────────────────────────────────────
+  Future<void> _navigateToBin(Bin bin) async {
     setState(() {
       _selectedBin = bin;
       _polylines.clear();
@@ -339,13 +351,18 @@ class _BinMapViewState extends State<BinMapView> {
                   ? _formatDistance(_distanceTo(_selectedBin!))
                   : null,
               onClose: _clearSelection,
-              onNavigate: () => _selectBin(_selectedBin!),
-              onViewDetails: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => BinDetailsPage(bin: _selectedBin!),
-                ),
-              ),
+              onNavigate: () => _navigateToBin(_selectedBin!),
+              onViewDetails: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BinDetailsPage(bin: _selectedBin!),
+                  ),
+                );
+                if (result is Bin && mounted) {
+                  _navigateToBin(result);
+                }
+              },
             ),
           ),
       ],
