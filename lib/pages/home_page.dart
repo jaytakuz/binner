@@ -140,8 +140,7 @@ class _HomePageState extends State<HomePage> {
 
     return Stack(
       children: [
-        Positioned.fill(child: BinMapView(bins: filteredBins)),
-        Positioned(right: 16, top: 16, child: _buildFilterChip(context)),
+        Positioned.fill(child: BinMapView(bins: filteredBins))
       ],
     );
   }
