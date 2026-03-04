@@ -59,14 +59,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   String _selectedBinType = 'all';
-  final List<String> _binTypes = [
-    'all',
-    'green',
-    'yellow',
-    'red',
-    'blue',
-    'orange',
-  ];
+  final List<String> _binTypes = ['all', 'green', 'yellow', 'red', 'orange'];
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +137,12 @@ class _HomePageState extends State<HomePage> {
 
     return Stack(
       children: [
-        Positioned.fill(child: BinMapView(bins: filteredBins, key: ValueKey(_selectedBinType),))
+        Positioned.fill(
+          child: BinMapView(
+            bins: filteredBins,
+            key: ValueKey(_selectedBinType),
+          ),
+        ),
       ],
     );
   }

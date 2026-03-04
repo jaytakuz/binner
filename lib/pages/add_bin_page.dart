@@ -35,7 +35,7 @@ class _AddBinPageState extends State<AddBinPage> {
   String _selectedBinType = 'green';
   bool _isSubmitting = false;
 
-  final List<String> _binTypes = ['green', 'yellow', 'red', 'blue', 'orange'];
+  final List<String> _binTypes = ['green', 'yellow', 'red', 'orange'];
 
   @override
   void dispose() {
@@ -261,7 +261,7 @@ class _AddBinPageState extends State<AddBinPage> {
                 ),
               ),
 
-              // Bin Name
+            // Bin Name
             _buildSectionTitle('Bin Name'),
             const SizedBox(height: 12),
             CustomTextField(
