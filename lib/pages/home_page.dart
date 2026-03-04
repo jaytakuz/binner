@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
 
     return Stack(
       children: [
-        Positioned.fill(child: BinMapView(bins: filteredBins))
+        Positioned.fill(child: BinMapView(bins: filteredBins, key: ValueKey(_selectedBinType),))
       ],
     );
   }
@@ -483,10 +483,10 @@ class _HomePageState extends State<HomePage> {
                         ),
                         selected: isSelected,
                         onSelected: (selected) {
-                          setModalState(() {
+                          setState(() {
                             _selectedBinType = type;
                           });
-                          setState(() {
+                          setModalState(() {
                             _selectedBinType = type;
                           });
                           Navigator.pop(context);
@@ -506,10 +506,10 @@ class _HomePageState extends State<HomePage> {
                   CustomButton(
                     text: 'Reset',
                     onPressed: () {
-                      setModalState(() {
+                      setState(() {
                         _selectedBinType = 'all';
                       });
-                      setState(() {
+                      setModalState(() {
                         _selectedBinType = 'all';
                       });
                       Navigator.pop(context);
