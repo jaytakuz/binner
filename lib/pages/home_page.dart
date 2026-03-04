@@ -145,18 +145,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildFilterChip(BuildContext context) {
-    final typeName = _selectedBinType == 'all'
-        ? 'All Types'
-        : AppTheme.getBinTypeName(_selectedBinType);
-    return FilterChip(
-      label: Text('Filter: $typeName'),
-      selected: _selectedBinType != 'all',
-      onSelected: (_) => _showFilterBottomSheet(context),
-      backgroundColor: Colors.white,
-    );
-  }
-
   Widget _buildNoBinsState(BuildContext context, {String? error}) {
     final message = error != null
         ? 'Unable to load data\n$error'
