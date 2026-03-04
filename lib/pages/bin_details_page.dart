@@ -65,9 +65,9 @@ class BinDetailsPage extends StatelessWidget {
                   Text(
                     bin.name,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          color: AppTheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      color: AppTheme.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   // Location Card
@@ -205,9 +205,8 @@ class BinDetailsPage extends StatelessWidget {
       'green':
           'Food waste such as food scraps, vegetable/fruit peels, wet perishable items',
       'yellow':
-          'Plastic waste such as plastic bottles, toothbrushes, plastic containers',
+          'Recyclable waste such as plastic bottles, paper, cardboard, glass',
       'red': 'Hazardous waste such as batteries, fluorescent bulbs, toothpaste',
-      'blue': 'Paper waste such as paper, magazines, cardboard boxes',
       'orange': 'General waste such as cork, sanitary bags, sinks',
     };
 

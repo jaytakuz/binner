@@ -4,9 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTheme {
   // Waste Bin Colors (Thai waste separation standard)
   static const Color greenBin = Color(0xFF4CAF50); // ขยะเปื้อนอาหาร/เปียก
-  static const Color yellowBin = Color(0xFFFFEB3B); // ขยะพลาสติก
+  static const Color yellowBin = Color(0xFFFFEB3B); // ขยะรีไซเคิล
   static const Color redBin = Color(0xFFF44336); // ขยะอันตราย
-  static const Color blueBin = Color(0xFF2196F3); // ขยะกระดาษ
   static const Color orangeBin = Color(0xFFFF9800); // ขยะทั่วไป/อื่นๆ
 
   // App Colors
@@ -192,13 +191,11 @@ class AppTheme {
         return greenBin;
       case 'yellow':
       case 'plastic':
+      case 'recycle':
         return yellowBin;
       case 'red':
       case 'hazardous':
         return redBin;
-      case 'blue':
-      case 'paper':
-        return blueBin;
       case 'orange':
       case 'general':
       case 'other':
@@ -217,13 +214,11 @@ class AppTheme {
         return 'Food Waste/Wet';
       case 'yellow':
       case 'plastic':
-        return 'Plastic Waste';
+      case 'recycle':
+        return 'Recycle Bin';
       case 'red':
       case 'hazardous':
         return 'Hazardous Waste';
-      case 'blue':
-      case 'paper':
-        return 'Paper Waste';
       case 'orange':
       case 'general':
       case 'other':

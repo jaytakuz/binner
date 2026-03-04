@@ -4,7 +4,7 @@ class Bin {
   final String location;
   final double latitude;
   final double longitude;
-  final String binType; // green, yellow, red, blue, orange
+  final String binType; // green, yellow, red, orange
   final String? description;
   final String? imageUrl;
   final String? addedById;
