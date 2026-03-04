@@ -72,6 +72,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Image.asset('assets/icons/logo.png', fit: BoxFit.contain),
+        ),
         title: const Text('Binner'),
         actions: [
           IconButton(
